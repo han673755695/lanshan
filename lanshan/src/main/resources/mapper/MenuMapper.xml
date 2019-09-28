@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.han.lanshan.system.dao.MenuMapper">
+	<!-- 数据库字段映射 -->
+	<resultMap id="BaseResultMap"
+		type="com.han.lanshan.system.entry.Menu">
+		
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" />
+		<result column="create_date" property="createDate" />
+		<result column="update_date" property="updateDate" />
+		<result column="name" property="name" />
+		<result column="status" property="status" />
+		<result column="sort" property="sort" />
+		<result column="menu_type" property="menuType" />
+		<result column="url" property="url" />
+		<result column="icon" property="icon" />
+		<result column="active" property="active" />
+		<result column="level" property="level" />
+	    
+	</resultMap>
+	
+	
+	<!-- 基础的数据库字段 -->
+	<sql id="Base_Column_List">
+		id,
+		parent_id,
+		create_date,
+		update_date,
+		name,
+		status,
+		sort,
+		menu_type,
+		url,
+		icon,
+		active,
+		level
+	</sql>
+	
+	
+	<!-- 根据主键获取信息 -->
+	<select id="findMenuById" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_menu
+		where id = #{id}
+	</select>
+	
+	
+	<!-- 根据实体类获取集合 -->
+	<select id="findMenuList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_menu
+		where 1=1
+		<if test="menu.id != null and menu.id != '' ">
+				and id = #{menu.id}
+		</if>
+		<if test="menu.parentId != null and menu.parentId != '' ">
+				and parent_id = #{menu.parentId}
+		</if>
+		<if test="menu.createDate != null and menu.createDate != '' ">
+				and DATE_FORMAT(create_date,'%Y-%m-%d') = DATE_FORMAT(#{menu.createDate},'%Y-%m-%d')
+		</if>
+		<if test="menu.updateDate != null and menu.updateDate != '' ">
+				and DATE_FORMAT(update_date,'%Y-%m-%d') = DATE_FORMAT(#{menu.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="menu.name != null and menu.name != '' ">
+				and name = #{menu.name}
+		</if>
+		<if test="menu.status != null and menu.status != '' ">
+				and status = #{menu.status}
+		</if>
+		<if test="menu.sort != null and menu.sort != '' ">
+				and sort = #{menu.sort}
+		</if>
+		<if test="menu.menuType != null and menu.menuType != '' ">
+				and menu_type = #{menu.menuType}
+		</if>
+		<if test="menu.url != null and menu.url != '' ">
+				and url = #{menu.url}
+		</if>
+		<if test="menu.icon != null and menu.icon != '' ">
+				and icon = #{menu.icon}
+		</if>
+		<if test="menu.active != null and menu.active != '' ">
+				and active = #{menu.active}
+		</if>
+		<if test="menu.level != null and menu.level != '' ">
+				and level = #{menu.level}
+		</if>
+		ORDER BY id
+		<if test="page != null and page.current != null and page.pageSize != null ">
+			limit #{page.current},#{page.pageSize}
+		</if>
+	</select>
+	
+	
+	<!-- 根据实体类获取Count数量 -->
+	<select id="findMenuCount" resultType="int">
+		select
+		count(id) totalCount
+		from t_menu
+		where 1=1
+		<if test="menu.id != null and menu.id != '' ">
+				and id = #{menu.id}
+		</if>
+		<if test="menu.parentId != null and menu.parentId != '' ">
+				and parent_id = #{menu.parentId}
+		</if>
+		<if test="menu.createDate != null and menu.createDate != '' ">
+				and DATE_FORMAT(create_date,'%Y-%m-%d') = DATE_FORMAT(#{menu.createDate},'%Y-%m-%d')
+		</if>
+		<if test="menu.updateDate != null and menu.updateDate != '' ">
+				and DATE_FORMAT(update_date,'%Y-%m-%d') = DATE_FORMAT(#{menu.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="menu.name != null and menu.name != '' ">
+				and name = #{menu.name}
+		</if>
+		<if test="menu.status != null and menu.status != '' ">
+				and status = #{menu.status}
+		</if>
+		<if test="menu.sort != null and menu.sort != '' ">
+				and sort = #{menu.sort}
+		</if>
+		<if test="menu.menuType != null and menu.menuType != '' ">
+				and menu_type = #{menu.menuType}
+		</if>
+		<if test="menu.url != null and menu.url != '' ">
+				and url = #{menu.url}
+		</if>
+		<if test="menu.icon != null and menu.icon != '' ">
+				and icon = #{menu.icon}
+		</if>
+		<if test="menu.active != null and menu.active != '' ">
+				and active = #{menu.active}
+		</if>
+		<if test="menu.level != null and menu.level != '' ">
+				and level = #{menu.level}
+		</if>
+	</select>
+	
+	
+	<!-- 根据id删除数据 -->
+	<update id="deleteMenu" parameterType="list">
+		update t_menu set active=2
+		where id in 
+		<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+	
+	
+	<!-- 动态添加数据 -->
+	<insert id="saveMenu"
+		parameterType="com.han.lanshan.system.entry.Menu">
+		insert into t_menu
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		
+			<if test="id != null">
+				id,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+			<if test="updateDate != null">
+				update_date,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
+			<if test="menuType != null">
+				menu_type,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="icon != null">
+				icon,
+			</if>
+			<if test="active != null">
+				active,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="parentId != null">
+				#{parentId},
+			</if>
+			<if test="createDate != null">
+				#{createDate},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate},
+			</if>
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="sort != null">
+				#{sort},
+			</if>
+			<if test="menuType != null">
+				#{menuType},
+			</if>
+			<if test="url != null">
+				#{url},
+			</if>
+			<if test="icon != null">
+				#{icon},
+			</if>
+			<if test="active != null">
+				#{active},
+			</if>
+			<if test="level != null">
+				#{level},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 动态修改数据 -->
+	<update id="updateActiveMenu" parameterType="map">
+		update t_menu
+		<set>
+			<if test="parentId != null">
+				parent_id = #{parentId},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="sort != null">
+				sort = #{sort},
+			</if>
+			<if test="menuType != null">
+				menu_type = #{menuType},
+			</if>
+			<if test="url != null">
+				url = #{url},
+			</if>
+			<if test="icon != null">
+				icon = #{icon},
+			</if>
+			<if test="level != null">
+				level = #{level},
+			</if>
+		</set>
+		WHERE
+		id=#{id,jdbcType=VARCHAR}
+		
+	</update>
+	
+	<!-- 修改数据 -->
+	<update id="updateMenu" parameterType="map">
+		update t_menu
+		set 
+			parent_id = #{parentId},
+			create_date = #{createDate},
+			update_date = #{updateDate},
+			name = #{name},
+			status = #{status},
+			sort = #{sort},
+			menu_type = #{menuType},
+			url = #{url},
+			icon = #{icon},
+			active = #{active},
+			level = #{level}
+		WHERE
+		id=#{id}
+	</update>
+	
+	 <!-- 根据用户id获取权限菜单 -->
+	<select id="findAuthMenuByUser" resultMap="BaseResultMap">
+		SELECT
+			m.*
+		FROM
+			t_user_role ur,
+			t_role r,
+			t_role_menu rm,
+			t_menu m
+		WHERE
+			ur.roleId = r.id
+		AND r.id = rm.roleId
+		AND rm.menuId = m.id
+		AND m.active=1
+		<if test="userId != null and userId != '' ">
+			AND ur.userId = #{userId}
+		</if>
+		<if test="menuTpye != null and menuTpye != '' ">
+			AND m.menu_type = #{menuTpye}
+		</if>
+		<if test="level != null and level != '' ">
+			AND m.`level`=#{level}
+		</if>
+		
+		order by m.sort asc
+	</select>
+	
+</mapper>

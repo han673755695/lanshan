@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+	<meta charset="UTF-8">
+	<#include "../common/head.html"/>
+	<@aHead title="后台登录-X-admin2.2" />
+	<link rel="stylesheet" href="${base}/system/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<link rel="stylesheet" href="${base}/system/zTree/css/demo.css" type="text/css">
+	<script type="text/javascript" src="${base}/system/zTree/js/jquery.ztree.core-3.5.js"></script>
+	<script type="text/javascript" src="${base}/system/zTree/js/jquery.ztree.excheck-3.5.js"></script>
+
+	<body>
+		<div class="x-nav">
+			<span class="layui-breadcrumb">
+            <a onclick="parent.xadmin.add_tab('桌面','${base}/s/system/login/toWelcome')" style="color: red" href="javascript:;">桌面</a>
+            <a href="">演示</a>
+            <a>
+              <cite>导航元素</cite>
+            </a>
+          </span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+				<i class="layui-icon layui-icon-refresh" style="line-height:30px">
+				</i>
+			</a>
+		</div>
+		
+		<!-- 左边的菜单树 -->
+        <div class="layui-fluid" style="float: left">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+						<div class="layui-card-header">
+							<button class="layui-btn" onclick="xadmin.open('添加菜单','${base}/s/menu/update/pre',800,600)">
+	                                <i class="layui-icon"></i>添加
+	                        </button>
+                        </div>
+						<div class="zTreeDemoBackground left">
+							<ul id="listTree" class="ztree"></ul>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+		<!-- 右边的详情 -->
+        <div class="layui-fluid" style="float: left">
+			<div class="layui-row">
+				<form class="layui-form">
+					<div class="layui-form-item">
+						<label for="name" class="layui-form-label">
+                            <span class="x-red">*</span>菜单名称</label>
+						<div class="layui-input-inline">
+							<input type="text" id="name" name="name" value="" required="" lay-verify="required" autocomplete="off" class="layui-input"/>
+							<input type="hidden" id="id" name="id" value="" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label for="url" class="layui-form-label">
+                            <span id="span" class="x-red"></span>url地址</label>
+						<div class="layui-input-inline">
+							<input type="text" id="url" name="url" value="" required="" lay-verify="" autocomplete="off" class="layui-input"></div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>资源类型</label>
+						<div class="layui-input-inline">
+							<select name="menuType" id="menuType" class="layui-input-inline">
+	                            <option value="1">菜单</option>
+	                            <option value="2">按钮</option>
+	                        </select>
+						</div>
+                    </div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">选择父菜单</label>
+						
+						<div class="layui-input-inline">
+							<input type="text" id="citySel" placeholder="选择菜单" readonly required="" lay-verify="" autocomplete="off" class="layui-input" onclick="showMenu()">
+							<input type="hidden" id="parentId" name="parentId"/>
+						</div>
+					</div>
+					
+					<div id="menuContent" class="menuContent" style="display:none; position: absolute; left: 126px; top: 137px; z-index: 5; background-color: rgb(255, 255, 253);">
+						<ul id="treeDemo" class="ztree" style="margin-top:0; width:180px; height: 300px;"></ul>
+					</div>
+					
+					<div class="layui-form-item">
+						<label for="url" class="layui-form-label"><span id="span" class="x-red"></span>图标</label>
+						<div class="layui-input-inline">
+							<input type="text" id="icon" name="icon" required="" lay-verify="" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+		                <label class="layui-form-label"><span class="x-red">*</span>是否可用</label>
+		                <div class="layui-input-block">
+	                		<input type="radio" name="status" value="1" lay-skin="primary" title="是" >
+		                	<input type="radio" name="status" value="2" lay-skin="primary" title="否" >
+		                </div>
+	                </div>
+					<div class="layui-form-item">
+						<label for="sort" class="layui-form-label">
+                            <span class="x-red">*</span>排序</label>
+						<div class="layui-input-inline">
+							<input type="text" id="sort" value="" name="sort" required="" lay-verify="number" autocomplete="off" class="layui-input"></div>
+					</div>
+					<div class="layui-form-item">
+						<label for="L_repass" class="layui-form-label"></label>
+						<button class="layui-btn" lay-filter="add" id="sub" lay-submit="">提交</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+	</body>
+	
+		<script type="text/javascript">
+		
+			var form;
+	       	layui.use(['form', 'layer'],
+				function() {
+					$ = layui.jquery;
+					form = layui.form;
+					var layer = layui.layer;
+					
+					//监听提交
+					form.on('submit(add)',
+						function(dataJson) {
+							var params = dataJson.field;
+							xadmin.ajaxPost("${base}/s/menu/update","${base}/s/menu/list",params,null,null);
+						
+							return false;
+						});
+	
+			});
+		
+			var setting = {
+				check: {
+					enable: true,
+					chkStyle: "radio",
+	                radioType: "all"
+				},
+				view: {
+					dblClickExpand: false
+				},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				callback: {
+					onCheck: onRightCheck
+				}
+			};
+	
+			var zNodes =[
+				
+			 ];
+			
+			<#if (returnDatas??) && (returnDatas?size>0)>
+		    	<#list returnDatas.data as menu>
+			    	var node = {};
+			    	var url = "${(menu.url)!''}";
+			    	if(!url){
+			    		node.id = "${(menu.id)!''}";
+						node.pId = "${(menu.parentId)!''}";
+						node.name = "${(menu.name)!''}";
+						node.open = true;
+			    	} else {
+						node.id = "${(menu.id)!''}";
+						node.pId = "${(menu.parentId)!''}";
+						node.name = "${(menu.name)!''}";
+					}
+					zNodes.push(node);
+		    	</#list>
+		    </#if>
+			
+			
+			function onRightCheck(e, treeId, treeNode) {
+				var cityObj = $("#citySel");
+				cityObj.val(treeNode.name);
+				$("#parentId").val(treeNode.id);
+			}
+	
+			function showMenu() {
+				$("#menuContent").slideDown("fast");
+				$("body").bind("mousedown", onBodyDown);
+			}
+			function hideMenu() {
+				$("#menuContent").fadeOut("fast");
+				$("body").unbind("mousedown", onBodyDown);
+			}
+			function onBodyDown(event) {
+				if (!(event.target.id == "menuBtn" || event.target.id == "citySel" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+					hideMenu();
+				}
+			}
+	
+			$(document).ready(function(){
+				$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+			});
+		</script>
+        
+        
+        
+        
+        
+        
+    </body>
+    <script>
+    layui.use(['laydate', 'form'],
+        function() {
+            var laydate = layui.laydate;
+
+          	//执行一个laydate实例
+			laydate.render({
+				elem: '#start', //指定元素
+				type: 'date',
+				format: 'yyyy-MM-dd',
+				max: new Date().format("yyyy-MM-dd"),
+				range: '~'
+			});
+        });
+
+		
+		function changeTab(){
+			element.tabChange('xbs_tab', '038a139703cac67ae15708a9b6bd3f85');
+		}
+        
+     </script>
+     
+	
+	
+	 <script type="text/javascript">
+		/* 列表树 */
+		var listSetting = {
+			/* check: {
+				enable: true,
+				chkStyle: "radio",
+                radioType: "all"
+			}, */
+			view: {
+				showLine: false,
+				addDiyDom: addDiyDom
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				onCheck: onLiftCheck
+			}
+		};
+		
+		function onCheck(e, treeId, treeNode) {
+			
+			console.log("ids: " + treeNode);
+		}
+
+		var listZNodes =[
+			
+		];
+		
+		
+		<#if (returnDatas??) && (returnDatas?size>0)>
+	    	<#list returnDatas.data as menu>
+		    	var node = {};
+		    	var url = "${(menu.url)!''}";
+		    	if(!url){
+		    		node.id = "${(menu.id)!''}";
+					node.pId = "${(menu.parentId)!''}";
+					node.name = "${(menu.name)!''}";
+					node.click = "onLiftCheck(\'" + node.id + "\')";
+					node.open = true;
+		    	} else {
+					node.id = "${(menu.id)!''}";
+					node.pId = "${(menu.parentId)!''}";
+					node.name = "${(menu.name)!''}";
+					node.click = "onLiftCheck(\'" + node.id + "\')";
+				}
+		    	listZNodes.push(node);
+	    	</#list>
+	    </#if>
+		
+	    
+	    function onLiftCheck(id){
+	    	console.log("id:" + id);
+	    	queryDetailAjax(id);
+	    }
+	    
+	    function addDiyDom(treeId, treeNode) {
+			if (treeNode.level != 0){
+				var aObj = $("#" + treeNode.tId);
+				var editStr = '<i class="layui-icon" id="diyBtn_' + treeNode.id + '" onclick="deleteMenu(\'' + treeNode.id + '\')">&#xe640;</i>';
+				aObj.append(editStr);
+			}
+		}
+	    
+	    //删除方法
+	    function deleteMenu(id){
+	    	layer.confirm('确认要删除吗？',function(index) {
+	    		var params = {'ids':id}
+				xadmin.ajaxPost("${base}/s/menu/delete","${base}/s/menu/list",params,null,null);
+	    		layer.close(index);
+            });
+	    	
+	    }
+	    
+	    /* 获取详细信息ajax方法 */
+		function queryDetailAjax(id){
+	    	var params = {'id':id};
+			xadmin.ajaxPostAlt("${base}/s/menu/look/json",null,params,function(dataResult){
+				var menu = dataResult.data;
+				$("#name").val(menu.name);
+				$("#id").val(menu.id);
+				$("#url").val(menu.url);
+				$("#parentId").val(menu.parentId);
+				$("#sort").val(menu.sort);
+				$("#menuType").val(menu.menuType);
+				$("#icon").val(menu.icon);
+				var pName = menu.parentName;
+				if(pName){
+					$("#citySel").val(pName);
+				}else{
+					$("#citySel").val("");
+				}
+				
+				$("input[name='status']").each(function(index,ele){
+					if($(ele).val() == menu.status){
+						$(ele).attr("checked","checked");
+						form.render('radio')
+					}
+				})
+				
+				form.render();
+			});
+		}
+
+		$(document).ready(function(){
+			$.fn.zTree.init($("#listTree"), listSetting, listZNodes);
+		});
+	
+	</script>
+	
+	
+	
+
+</html>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.han.lanshan.system.dao.RoleMapper">
+	<!-- 数据库字段映射 -->
+	<resultMap id="BaseResultMap"
+		type="com.han.lanshan.system.entry.Role">
+		
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="roleName" property="roleName" />
+		<result column="bewrite" property="bewrite" />
+		<result column="createUser" property="createUser" />
+		<result column="createDate" property="createDate" />
+		<result column="updateUser" property="updateUser" />
+		<result column="updateDate" property="updateDate" />
+		<result column="active" property="active" />
+	    
+	</resultMap>
+	
+	
+	<!-- 基础的数据库字段 -->
+	<sql id="Base_Column_List">
+		id,
+		roleName,
+		bewrite,
+		createUser,
+		createDate,
+		updateUser,
+		updateDate,
+		active
+	</sql>
+	
+	
+	<!-- 根据主键获取信息 -->
+	<select id="findRoleById" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_role
+		where id = #{id}
+	</select>
+	
+	
+	<!-- 根据实体类获取集合 -->
+	<select id="findRoleList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_role
+		where 1=1
+		<if test="role.id != null and role.id != '' ">
+				and id = #{role.id}
+		</if>
+		<if test="role.roleName != null and role.roleName != '' ">
+				and roleName = #{role.roleName}
+		</if>
+		<if test="role.bewrite != null and role.bewrite != '' ">
+				and bewrite = #{role.bewrite}
+		</if>
+		<if test="role.createUser != null and role.createUser != '' ">
+				and createUser = #{role.createUser}
+		</if>
+		<if test="role.createDate != null and role.createDate != '' ">
+				and DATE_FORMAT(createDate,'%Y-%m-%d') = DATE_FORMAT(#{role.createDate},'%Y-%m-%d')
+		</if>
+		<if test="role.updateUser != null and role.updateUser != '' ">
+				and updateUser = #{role.updateUser}
+		</if>
+		<if test="role.updateDate != null and role.updateDate != '' ">
+				and DATE_FORMAT(updateDate,'%Y-%m-%d') = DATE_FORMAT(#{role.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="role.active != null and role.active != '' ">
+				and active = #{role.active}
+		</if>
+		ORDER BY id
+		<if test="page != null and page.current != null and page.pageSize != null ">
+			limit #{page.current},#{page.pageSize}
+		</if>
+	</select>
+	
+	
+	<!-- 根据实体类获取Count数量 -->
+	<select id="findRoleCount" resultType="int">
+		select
+		count(id) totalCount
+		from t_role
+		where 1=1
+		<if test="role.id != null and role.id != '' ">
+				and id = #{role.id}
+		</if>
+		<if test="role.roleName != null and role.roleName != '' ">
+				and roleName = #{role.roleName}
+		</if>
+		<if test="role.bewrite != null and role.bewrite != '' ">
+				and bewrite = #{role.bewrite}
+		</if>
+		<if test="role.createUser != null and role.createUser != '' ">
+				and createUser = #{role.createUser}
+		</if>
+		<if test="role.createDate != null and role.createDate != '' ">
+				and DATE_FORMAT(createDate,'%Y-%m-%d') = DATE_FORMAT(#{role.createDate},'%Y-%m-%d')
+		</if>
+		<if test="role.updateUser != null and role.updateUser != '' ">
+				and updateUser = #{role.updateUser}
+		</if>
+		<if test="role.updateDate != null and role.updateDate != '' ">
+				and DATE_FORMAT(updateDate,'%Y-%m-%d') = DATE_FORMAT(#{role.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="role.active != null and role.active != '' ">
+				and active = #{role.active}
+		</if>
+	</select>
+	
+	
+	<!-- 根据id删除数据 -->
+	<update id="deleteRole" parameterType="list">
+		update t_role set active=2
+		where id in 
+		<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+	
+	
+	<!-- 动态添加数据 -->
+	<insert id="saveRole"
+		parameterType="com.han.lanshan.system.entry.Role">
+		insert into t_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		
+					<if test="id != null">
+						id,
+					</if>
+					<if test="roleName != null">
+						roleName,
+					</if>
+					<if test="bewrite != null">
+						bewrite,
+					</if>
+					<if test="createUser != null">
+						createUser,
+					</if>
+					<if test="createDate != null">
+						createDate,
+					</if>
+					<if test="updateUser != null">
+						updateUser,
+					</if>
+					<if test="updateDate != null">
+						updateDate,
+					</if>
+					<if test="active != null">
+						active,
+					</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+					<if test="id != null">
+						#{id},
+					</if>
+					<if test="roleName != null">
+						#{roleName},
+					</if>
+					<if test="bewrite != null">
+						#{bewrite},
+					</if>
+					<if test="createUser != null">
+						#{createUser},
+					</if>
+					<if test="createDate != null">
+						#{createDate},
+					</if>
+					<if test="updateUser != null">
+						#{updateUser},
+					</if>
+					<if test="updateDate != null">
+						#{updateDate},
+					</if>
+					<if test="active != null">
+						#{active},
+					</if>
+		</trim>
+	</insert>
+	
+	<!-- 动态修改数据 -->
+	<update id="updateActiveRole" parameterType="map">
+		update t_role
+		<set>
+						<if test="roleName != null">
+							roleName = #{roleName},
+						</if>
+						<if test="bewrite != null">
+							bewrite = #{bewrite},
+						</if>
+						<if test="createUser != null">
+							createUser = #{createUser},
+						</if>
+						<if test="createDate != null">
+							createDate = #{createDate},
+						</if>
+						<if test="updateUser != null">
+							updateUser = #{updateUser},
+						</if>
+						<if test="updateDate != null">
+							updateDate = #{updateDate},
+						</if>
+						<if test="active != null">
+							active = #{active},
+						</if>
+		</set>
+		WHERE
+		id=#{id,jdbcType=VARCHAR}
+		
+	</update>
+	
+	<!-- 修改数据 -->
+	<update id="updateRole" parameterType="map">
+		update t_role
+		set 
+					roleName = #{roleName},
+					bewrite = #{bewrite},
+					createUser = #{createUser},
+					createDate = #{createDate},
+					updateUser = #{updateUser},
+					updateDate = #{updateDate},
+					active = #{active}
+		WHERE
+		id=#{id}
+	</update>
+	
+</mapper>

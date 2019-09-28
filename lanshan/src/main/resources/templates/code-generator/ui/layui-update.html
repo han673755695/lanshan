@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+	<meta charset="UTF-8">
+	<${jing}include "../common/head.html"/>
+	<${aite}aHead title="后台登录-X-admin2.2" />
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row">
+				<form class="layui-form">
+				
+		<#if columnsList?exists && (columnsList?size gt 0)>
+			<#list columnsList as fieldItem >
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>${fieldItem.COLUMN_COMMENT}</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${prefix}(returnDatas.data.${fieldItem.entryClumu})!''${suffix}" id="${fieldItem.entryClumu}" name="${fieldItem.entryClumu}" required="" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+			</#list>
+		</#if>
+					
+					<div class="layui-form-item">
+						<label for="L_repass" class="layui-form-label"></label>
+						<button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script>
+			layui.use(['form', 'layer', 'jquery'],function() {
+				var form = layui.form,
+					layer = layui.layer;
+				//自定义验证规则
+				form.verify({
+					nikename: function(value) {
+						if(value.length < 2) {
+							return '昵称至少得2个字符啊';
+						}
+					},
+					
+				});
+	
+				//监听提交
+				form.on('submit(add)',function(data) {
+						
+					xadmin.ajaxPost("${prefix}base${suffix}/s/${lowerCaseFirst}/update",null,data.field,null,function(){
+						//关闭当前frame
+						xadmin.close();
+						// 可以对父窗口进行刷新 
+						xadmin.father_reload();
+					});
+				
+					return false;
+				});
+				
+				
+				form.render();
+	
+			});
+		</script>
+	</body>
+
+</html>
