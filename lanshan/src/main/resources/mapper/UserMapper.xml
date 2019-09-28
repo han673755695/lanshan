@@ -64,7 +64,7 @@
 				and id = #{user.id}
 		</if>
 		<if test="user.name != null and user.name != '' ">
-				and name = #{user.name}
+				and name = like CONCAT('%',#{user.name},'%')
 		</if>
 		<if test="user.age != null and user.age != '' ">
 				and age = #{user.age}

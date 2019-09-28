@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.han.lanshan.system.utils.JsonUtils;
 import com.han.lanshan.system.utils.PinyinUtils;
+import com.han.lanshan.system.utils.SecUtils;
 import com.han.lanshan.system.utils.UUIDUtils;
 
 @RunWith(SpringRunner.class)
@@ -38,6 +39,9 @@ public class LanshanApplicationTests {
 			String uuid = UUIDUtils.getUUID();
 			System.out.println(uuid);
 		}
+		
+		String md5With32Bit = SecUtils.encoderByMd5With32Bit("123");
+		System.out.println("md5With32Bit: " + md5With32Bit);
 		
 	}
 

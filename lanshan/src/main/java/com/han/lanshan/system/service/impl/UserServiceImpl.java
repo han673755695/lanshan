@@ -18,6 +18,7 @@ import com.han.lanshan.system.entry.User;
 import com.han.lanshan.system.entry.UserRole;
 import com.han.lanshan.system.service.IUserRoleService;
 import com.han.lanshan.system.service.IUserService;
+import com.han.lanshan.system.utils.SecUtils;
 import com.han.lanshan.system.utils.UUIDUtils;
 
 
@@ -80,8 +81,10 @@ public class UserServiceImpl extends BaseServiceImpl implements IUserService {
 		try {
 			String userId = SessionUser.getUserId();
 			if (StringUtils.isBlank(user.getId())) {
+				String password = SecUtils.encoderByMd5With32Bit(user.getAccount());
 				String uuid = UUIDUtils.getUUID();
 				user.setId(uuid);
+				user.setPassword(password);
 				user.setStatus(SystemEnum.ActiveEnum.可用.getValue());
 				user.setCreateDate(new Date());
 				userDao.saveUser(user);

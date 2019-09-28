@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
 	<meta charset="UTF-8">
-	<${jing}include "../common/head.html"/>
-	<${aite}aHead title="后台登录-X-admin2.2" />
+	<#include "../common/head.html"/>
+	<@aHead title="后台登录-X-admin2.2" />
 
 	<body>
 		<div class="x-nav">
 			<span class="layui-breadcrumb">
-            <a onclick="parent.xadmin.add_tab('桌面','${prefix}base${suffix}/s/system/login/toWelcome')" style="color: red" href="javascript:;">桌面</a>
+            <a onclick="parent.xadmin.add_tab('桌面','${base}/s/system/login/toWelcome')" style="color: red" href="javascript:;">桌面</a>
             <a href="">演示</a>
             <a>
               <cite>导航元素</cite>
@@ -23,36 +23,39 @@
 				<div class="layui-col-md12">
 					<div class="layui-card">
 						<div class="layui-card-body ">
-							<form id="searchForm" action="${prefix}base${suffix}/s/${lowerCaseFirst}/list" class="layui-form layui-col-space5">
-								<input type="hidden" name="currentPage" value="${prefix}(returnDatas.page.pageNum)!${suffix}"/>
-								<input type="hidden" name="pageSize" value="${prefix}(returnDatas.page.pageSize)!${suffix}"/>
-								<div class="layui-inline">
-									<span>日期:</span>
-								</div>
-								<div class="layui-inline">
-									<input class="layui-input" autocomplete="off" placeholder="开始日" name="start" value="${prefix}(returnDatas.queryParams.start)!''${suffix}" id="start">
-								</div>
+							<form id="searchForm" action="${base}/s/org/list" class="layui-form layui-col-space5">
+								<input type="hidden" name="currentPage" value="${(returnDatas.page.pageNum)!}"/>
+								<input type="hidden" name="pageSize" value="${(returnDatas.page.pageSize)!}"/>
 								<div class="layui-inline">
 									<span>姓名:</span>
 								</div>
-								<div class="layui-inline ">
-									<input type="text" name="name" value="${prefix}(returnDatas.queryParams.name)!''${suffix}" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+								<div class="layui-inline">
+									<input type="text" name="orgName" value="${(returnDatas.queryParams.orgName)!''}" placeholder="请输入用户名" autocomplete="off" class="layui-input">
 								</div>
+								<div class="layui-inline">
+									<span>是否可用:</span>
+								</div>
+								<div class="layui-inline">
+									<select class="layui-input-inline" id="active" name="active" required="" lay-verify="required" lay-search>
+			                            <option value="">请选择</option>
+			                            <option value="1">可用</option>
+			                            <option value="2">不可用</option>
+			                        </select>
+								</div>
+								
+								
 								<div class="layui-inline">
 									<button type="button" onclick="search()" class="layui-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
 								</div>
 							</form>
 						</div>
 						<div class="layui-card-header">
-							<${aite}shiro.hasPermission name="/s/${lowerCaseFirst}/delete" >
+							<@shiro.hasPermission name="/s/org/delete" >
 								<button type="button" class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-							</${aite}shiro.hasPermission>
-							<${aite}shiro.hasPermission name="/s/${lowerCaseFirst}/update" >
-								<button type="button" class="layui-btn" onclick="xadmin.open('添加','${prefix}base${suffix}/s/${lowerCaseFirst}/update/pre',600,400)"><i class="layui-icon"></i>添加</button>
-							</${aite}shiro.hasPermission>
-							<${aite}shiro.hasPermission name="/s/${lowerCaseFirst}/list/export" >
-								<button type="button" class="layui-btn layui-btn-warm" onclick="exportExcel()"><i class="layui-icon">&#xe601;</i>导出</button>
-							</${aite}shiro.hasPermission>
+							</@shiro.hasPermission>
+							<@shiro.hasPermission name="/s/org/update" >
+								<button type="button" class="layui-btn" onclick="xadmin.open('添加','${base}/s/org/update/pre',600,400)"><i class="layui-icon"></i>添加</button>
+							</@shiro.hasPermission>
 							
 						</div>
 						<div class="layui-card-body layui-table-body layui-table-main">
@@ -68,55 +71,54 @@
 										<!--start_no_export-->
 										<!--first_start_export-->
 										
-							<#if columnsList?exists && (columnsList?size gt 0)>
-								<#list columnsList as fieldItem >
-										<th>${fieldItem.COLUMN_COMMENT}</th>
-								</#list>
-							</#if>
+										<th>部门名称</th>
+										<th>描述</th>
+										<th>创建时间</th>
+										<th>是否可用(1:可用,2:不可用)</th>
 									</tr>
 								</thead>
 								<!--first_end_export-->
                                 <!--start_export-->
 								<tbody>
-									<${jing}if (returnDatas.data)??>
-										<${jing}list returnDatas.data as ${lowerCaseFirst}>
+									<#if (returnDatas.data)??>
+										<#list returnDatas.data as org>
 											<tr>
 												<!--start_no_export-->
 												<td style="width: 80px;">
-													<input type="checkbox" name="id" value="${prefix}(${lowerCaseFirst}.id)!''${suffix}" lay-skin="primary">
+													<input type="checkbox" name="id" value="${(org.id)!''}" lay-skin="primary">
 												</td>
 												<td class="td-manage">
-													<${aite}shiro.hasPermission name="/s/${lowerCaseFirst}/look" >
-														<a title="查看" onclick="xadmin.open('查看','${prefix}base${suffix}/s/${lowerCaseFirst}/look?id=${prefix}${lowerCaseFirst}.id${suffix}',600,400)" href="javascript:;">
+													<@shiro.hasPermission name="/s/org/look" >
+														<a title="查看" onclick="xadmin.open('查看','${base}/s/org/look?id=${org.id}',600,400)" href="javascript:;">
 															<i class="layui-icon">&#xe63c;</i>
 														</a>
-													</${aite}shiro.hasPermission>
-													<${aite}shiro.hasPermission name="/s/${lowerCaseFirst}/update" >
-														<a title="编辑" onclick="xadmin.open('编辑','${prefix}base${suffix}/s/${lowerCaseFirst}/update/pre?id=${prefix}${lowerCaseFirst}.id${suffix}',600,400)" href="javascript:;">
+													</@shiro.hasPermission>
+													<@shiro.hasPermission name="/s/org/update" >
+														<a title="编辑" onclick="xadmin.open('编辑','${base}/s/org/update/pre?id=${org.id}',600,400)" href="javascript:;">
 															<i class="layui-icon">&#xe642;</i>
 														</a>
-													</${aite}shiro.hasPermission>
-													<${aite}shiro.hasPermission name="/s/${lowerCaseFirst}/delete" >
-														<a title="删除" onclick="member_del(this,'${prefix}${lowerCaseFirst}.id${suffix}')" href="javascript:;">
+													</@shiro.hasPermission>
+													<@shiro.hasPermission name="/s/org/delete" >
+														<a title="删除" onclick="member_del(this,'${org.id}')" href="javascript:;">
 															<i class="layui-icon">&#xe640;</i>
 														</a>
-													</${aite}shiro.hasPermission>
+													</@shiro.hasPermission>
 												</td>
 												<!--end_no_export-->
 												
-												
-									<#if columnsList?exists && (columnsList?size gt 0)>
-										<#list columnsList as fieldItem >
-											<#if fieldItem.DATA_TYPE == 'datetime'>
-												<td>${prefix}((${lowerCaseFirst}.${fieldItem.entryClumu})?string('yyyy-MM-dd HH:mm:ss'))!''${suffix}</td>
-											<#else>
-												<td>${prefix}(${lowerCaseFirst}.${fieldItem.entryClumu})!''${suffix}</td>
-											</#if>
+												<td>${(org.orgName)!''}</td>
+												<td>${(org.describe)!''}</td>
+												<td>${((org.createDate)?string('yyyy-MM-dd HH:mm:ss'))!''}</td>
+												<td>
+													<#if (org.active)?? && (org.active == '1')>
+														可用
+													<#elseif (org.active)?? && (org.active == '2')>
+														不可用
+													</#if>
+												</td>
+											</tr>
 										</#list>
 									</#if>
-											</tr>
-										</${jing}list>
-									</${jing}if>
 								</tbody>
 							</table>
 							<!--last_end_export-->
@@ -155,9 +157,13 @@
 				range: '~'
 			});
 		});
-
-
-		/*用户-删除*/
+		
+		
+		var active = "${(returnDatas.queryParams.active)!''}";
+		if(!isNull(active)){
+			$("#active").val(active);
+		}
+		
 		function member_del(obj, id) {
 			layer.confirm('确认要删除吗？', function(index) {
 				layer.close(index);
@@ -166,7 +172,7 @@
 					"ids":id
 				}
 				
-				xadmin.ajaxPost("${prefix}base${suffix}/s/${lowerCaseFirst}/delete","${prefix}base${suffix}/s/${lowerCaseFirst}/list",params,null,null);
+				xadmin.ajaxPost("${base}/s/org/delete","${base}/s/org/list",params,null,null);
 			});
 		}
 
@@ -194,7 +200,7 @@
 					"ids":ids.toString()
 				}
 				
-				xadmin.ajaxPost("${prefix}base${suffix}/s/${lowerCaseFirst}/delete","${prefix}base${suffix}/s/${lowerCaseFirst}/list",params,null,null);
+				xadmin.ajaxPost("${base}/s/org/delete","${base}/s/org/list",params,null,null);
 				
 			});
 		}
@@ -212,7 +218,7 @@
 		
 		//导出方法
 		function exportExcel(){
-	    	$("#searchForm").attr("action","${prefix}base${suffix}/s/${lowerCaseFirst}/list/export");
+	    	$("#searchForm").attr("action","${base}/s/org/list/export");
 	    	$("#searchForm").submit();
 		}
 		

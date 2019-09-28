@@ -74,21 +74,21 @@ public class GeneratorController {
 			dataMap.put("lowerCaseFirst", lowerCaseFirst);
 			
 			//生成mapper.xml文件
-			createTemplete(dataMap, Constant.GeneratorEnum.mapperXml.getValue(), Constant.createFilePathEnum.mapper文件.getValue(), "Mapper.xml");
+			createTemplete(dataMap, Constant.GeneratorEnum.mapperXml.getValue(), Constant.createFilePathEnum.mapper文件.getValue(), upperCaseFirst + "Mapper.xml");
 			//生成实体类文件
-			createTemplete(dataMap, Constant.GeneratorEnum.实体类.getValue(), Constant.createFilePathEnum.entry层.getValue(), ".java");
+			createTemplete(dataMap, Constant.GeneratorEnum.实体类.getValue(), Constant.createFilePathEnum.entry层.getValue(), upperCaseFirst + ".java");
 			//生成实体类文件
-			createTemplete(dataMap, Constant.GeneratorEnum.dao层.getValue(), Constant.createFilePathEnum.dao层.getValue(), "Mapper.java");
+			createTemplete(dataMap, Constant.GeneratorEnum.dao层.getValue(), Constant.createFilePathEnum.dao层.getValue(), upperCaseFirst + "Mapper.java");
 			//生成service接口文件
-			createTemplete(dataMap, Constant.GeneratorEnum.service接口.getValue(), Constant.createFilePathEnum.service层.getValue(), "Service.java");
+			createTemplete(dataMap, Constant.GeneratorEnum.service接口.getValue(), Constant.createFilePathEnum.service层.getValue(), "I" + upperCaseFirst + "Service.java");
 			//生成service实现类文件
-			createTemplete(dataMap, Constant.GeneratorEnum.service实现.getValue(), Constant.createFilePathEnum.service层.getValue(), "ServiceImpl.java");
+			createTemplete(dataMap, Constant.GeneratorEnum.service实现.getValue(), Constant.createFilePathEnum.service层.getValue() + "impl/", upperCaseFirst + "ServiceImpl.java");
 			//生成Controller类文件
-			createTemplete(dataMap, Constant.GeneratorEnum.controller层.getValue(), Constant.createFilePathEnum.controller层.getValue(), "Controller.java");
+			createTemplete(dataMap, Constant.GeneratorEnum.controller层.getValue(), Constant.createFilePathEnum.controller层.getValue(), upperCaseFirst + "Controller.java");
 			//生成list类列表文件
-			createTemplete(dataMap, Constant.GeneratorEnum.列表.getValue(), Constant.createFilePathEnum.list层.getValue(), "List.html");
+			createTemplete(dataMap, Constant.GeneratorEnum.列表.getValue(), Constant.createFilePathEnum.list层.getValue() + lowerCaseFirst + "/", lowerCaseFirst + "List.html");
 			//生成crud类列表文件
-			createTemplete(dataMap, Constant.GeneratorEnum.新增.getValue(), Constant.createFilePathEnum.list层.getValue(), "Cru.html");
+			createTemplete(dataMap, Constant.GeneratorEnum.新增.getValue(), Constant.createFilePathEnum.list层.getValue() + lowerCaseFirst + "/", lowerCaseFirst + "Cru.html");
 			
 			
 		} catch (IOException e) {
@@ -123,7 +123,7 @@ public class GeneratorController {
 			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
 			TemplateException {
 		Template template = configuration.getTemplate(templetePath);
-		String path = createPath + dataMap.get("entryName") + fileSuffix;
+		String path = createPath + fileSuffix;
 		File upload = new File(path);
 		if(!upload.getParentFile().exists()) {
 			upload.getParentFile().mkdirs();

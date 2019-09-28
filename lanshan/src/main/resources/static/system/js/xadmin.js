@@ -30,8 +30,6 @@
 
 	Xadmin.prototype.add_tab = function (title,url,is_refresh) {
 		var id = md5(url);//md5每个url
-
-		console.log($('.x-iframe'));
 		
 		//重复点击
 		for (var i = 0; i <$('.x-iframe').length; i++) {
@@ -52,7 +50,7 @@
   Xadmin.prototype.del_tab = function (id) {
 
     if(id){
-      console.log(88);
+    	
     }else{
       var id = $(window.frameElement).attr('tab-id');
       parent.element.tabDelete('xbs_tab', id);

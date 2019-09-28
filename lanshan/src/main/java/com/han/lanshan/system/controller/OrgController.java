@@ -1,6 +1,7 @@
 package com.han.lanshan.system.controller;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -19,17 +20,17 @@ import com.han.lanshan.system.common.GlobalStatic;
 import com.han.lanshan.system.common.Page;
 import com.han.lanshan.system.common.ReturnData;
 import com.han.lanshan.system.constant.SystemEnum;
-import com.han.lanshan.system.entry.Menu;
-import com.han.lanshan.system.service.IMenuService;
+import com.han.lanshan.system.entry.Org;
+import com.han.lanshan.system.service.IOrgService;
 
 @Controller
-@RequestMapping("/s/menu")
-public class MenuController extends BaseController {
+@RequestMapping("/s/org")
+public class OrgController extends BaseController {
 
-	private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
+	private static final Logger logger = LoggerFactory.getLogger(OrgController.class);
 	
 	@Resource
-	private IMenuService menuService;
+	private IOrgService orgService;
 	
 	/**
 	 * 列表
@@ -40,10 +41,11 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public String list(HttpServletRequest request, Model model, Menu menu) {
-		ReturnData returnObject = listjson(request, model, menu);
+	public String list(HttpServletRequest request, Model model, Org org) {
+		/*org.setActive(SystemEnum.ActiveEnum.可用.getValue());*/
+		ReturnData returnObject = listjson(request, model, org);
 		model.addAttribute(GlobalStatic.returnDatas, returnObject);
-		return "/system/menu/menuList";
+		return "/system/org/orgList";
 	}
 	
 	
@@ -55,18 +57,19 @@ public class MenuController extends BaseController {
 	 */
 	@RequestMapping("/list/json")
 	@ResponseBody
-	public ReturnData listjson(HttpServletRequest request, Model model, Menu menu) {
+	public ReturnData listjson(HttpServletRequest request, Model model, Org org) {
 		ReturnData returnData = ReturnData.getSuccess();
 		
 		try {
 			Page page = Page.getPage(request);
-			List<Menu> datas = menuService.findMenuList(menu, null);
-			int totalCount = menuService.findMenuCount(menu, null);
+			List<Org> datas = orgService.findOrgList(org, page);
+			int totalCount = orgService.findOrgCount(org, page);
 			page.setTotalCount(totalCount);
-			returnData.setQueryParams(menu);
+			returnData.setQueryParams(org);
 			returnData.setPage(page);
 			returnData.setData(datas);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			returnData.setStatus(ReturnData.ERROR);
 			returnData.setMessage("操作失败");
@@ -85,13 +88,14 @@ public class MenuController extends BaseController {
 	 * @param 
 	 */
 	@RequestMapping("/list/export")
-	public void listexport(HttpServletRequest request, HttpServletResponse response, Model model, Menu menu) {
+	public void listexport(HttpServletRequest request, HttpServletResponse response, Model model, Org org) {
 		try {
 			Page page = Page.getPage(request);
-			File file = menuService.findDataExportExcel("/system/menu/menuList", page, Menu.class, menu);
-			String fileName="menu" + GlobalStatic.excelext;
+			File file = orgService.findDataExportExcel("/system/org/orgList", page, Org.class, org);
+			String fileName="org" + GlobalStatic.excelext;
 			downFile(response, file, fileName, true);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
 		return;
@@ -109,7 +113,7 @@ public class MenuController extends BaseController {
 	public String look(Model model, HttpServletRequest request, HttpServletResponse response) {
 		ReturnData returnObject = lookjson(model, request, response);
 		model.addAttribute(GlobalStatic.returnDatas, returnObject);
-		return "/system/menu/menuLook";
+		return "/system/org/orgLook";
 	}
 	
 	/**
@@ -127,18 +131,13 @@ public class MenuController extends BaseController {
 		try {
 			java.lang.String id = request.getParameter("id");
 			if (StringUtils.isNotBlank(id)) {
-				Menu menu = menuService.findMenuById(id);
-				returnObject.setData(menu);
-				
-				if (!"-1".equals(menu.getParentId())) {
-					Menu parentMenu = menuService.findMenuById(menu.getParentId());
-					menu.setParentName(parentMenu.getName());
-				}
-				
+				Org org = orgService.findOrgById(id);
+				returnObject.setData(org);
 			}else{
 				returnObject.setStatus(ReturnData.ERROR);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			returnObject.setStatus(ReturnData.ERROR);
 			returnObject.setMessage("操作失败");
@@ -156,17 +155,18 @@ public class MenuController extends BaseController {
 	 */
 	@RequestMapping("/update")
 	@ResponseBody      
-	public ReturnData saveorupdate(Model model, Menu menu, HttpServletRequest request, HttpServletResponse response) {
+	public ReturnData saveorupdate(Model model, Org org, HttpServletRequest request, HttpServletResponse response) {
 		ReturnData returnObject = ReturnData.getSuccess();
 		try {
-			java.lang.String id =menu.getId();
+			java.lang.String id =org.getId();
 			if(StringUtils.isBlank(id)){
-				menu.setId(null);
+				org.setId(null);
 			}
 			
-			menuService.saveorupdateMenu(menu, true);
+			orgService.saveorupdateOrg(org, true);
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			returnObject.setStatus(ReturnData.ERROR);
 			returnObject.setMessage("操作失败");
@@ -185,15 +185,16 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/update/pre")
-	public String updatepre(Model model, HttpServletRequest request, HttpServletResponse response, Menu menu) {
+	public String updatepre(Model model, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			ReturnData returnObject = listjson(request, model, menu);
+			ReturnData returnObject = lookjson(model, request, response);
 			model.addAttribute(GlobalStatic.returnDatas, returnObject);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
 		
-		return "/system/menu/menuCru";
+		return "/system/org/orgCru";
 	}
 	
 	/**
@@ -210,33 +211,15 @@ public class MenuController extends BaseController {
 		try {
 			String ids=request.getParameter("ids");
 			if(StringUtils.isNotBlank(ids)){
-			 	menuService.deleteMenu(ids);
+				String[] idsArr = ids.split(",");
+			 	orgService.deleteOrg(Arrays.asList(idsArr));
 			} else {
 				returnObject.setStatus(ReturnData.ERROR);
 				returnObject.setMessage("删除失败");
 				return returnObject;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			returnObject.setStatus(ReturnData.ERROR);
-			returnObject.setMessage("操作失败");
-			return returnObject;
-		}
-		return returnObject;
-	}
-	
-	
-	@RequestMapping(value="/getTreeMenu")
-	@ResponseBody      
-	public ReturnData getTreeMenu(HttpServletRequest request) {
-		ReturnData returnObject = ReturnData.getSuccess();
-		try {
-			Menu menu = new Menu();
-			menu.setActive(SystemEnum.ActiveEnum.可用.getValue());
-			List<Menu> treeMenuList = menuService.getTreeMenu(menu);
-			returnObject.setData(treeMenuList);
-			
-		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			returnObject.setStatus(ReturnData.ERROR);
 			returnObject.setMessage("操作失败");
