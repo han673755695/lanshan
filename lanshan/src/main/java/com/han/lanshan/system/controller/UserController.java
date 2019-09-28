@@ -73,6 +73,24 @@ public class UserController extends BaseController {
 		try {
 			Page page = Page.getPage(request);
 			List<User> datas = userService.findUserList(user, page);
+			
+			for (User user2 : datas) {
+				//该用户的角色
+				List<Map<String, String>> findUserRoleByUserId = userRoleService.findUserRoleByUserId(user2.getId());
+				String roleNames = "";
+				if (CollectionUtils.isNotEmpty(findUserRoleByUserId)) {
+					for (int i = 0; i < findUserRoleByUserId.size(); i++) {
+						if (i == 0) {
+							roleNames += findUserRoleByUserId.get(i).get("roleName");
+						}else {
+							roleNames += "," + findUserRoleByUserId.get(i).get("roleName");
+						}
+					}
+				}
+				user2.setRoleNames(roleNames);
+			}
+			
+			
 			int totalCount = userService.findUserCount(user, page);
 			page.setTotalCount(totalCount);
 			returnData.setQueryParams(user);
@@ -98,6 +116,7 @@ public class UserController extends BaseController {
 	public void listexport(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
 		try {
 			Page page = Page.getPage(request);
+			user.setStatus(SystemEnum.ActiveEnum.可用.getValue());
 			File file = userService.findDataExportExcel("/system/user/userList", page, User.class, user);
 			String fileName="user" + GlobalStatic.excelext;
 			downFile(response, file, fileName, true);

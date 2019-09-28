@@ -34,8 +34,23 @@ public class UserServiceImpl extends BaseServiceImpl implements IUserService {
 	 */
 	@Override
 	public <T> List<T> findListDataByParams(Object obj, Class<T> clazz, Page page) throws Exception {
-		
-		return (List<T>) findUserList((User) obj, page);
+		List<User> datas = (List<User>) findUserList((User) obj, page);
+		for (User user2 : datas) {
+			//该用户的角色
+			List<Map<String, String>> findUserRoleByUserId = userRoleService.findUserRoleByUserId(user2.getId());
+			String roleNames = "";
+			if (CollectionUtils.isNotEmpty(findUserRoleByUserId)) {
+				for (int i = 0; i < findUserRoleByUserId.size(); i++) {
+					if (i == 0) {
+						roleNames += findUserRoleByUserId.get(i).get("roleName");
+					}else {
+						roleNames += "," + findUserRoleByUserId.get(i).get("roleName");
+					}
+				}
+			}
+			user2.setRoleNames(roleNames);
+		}
+		return (List<T>) datas;
 	}
 	
 

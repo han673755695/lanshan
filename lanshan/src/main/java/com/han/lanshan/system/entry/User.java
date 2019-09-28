@@ -30,6 +30,10 @@ public class User implements Serializable {
 	 */
 	private String roleIds;
 	/**
+	 * 角色名称
+	 */
+	private String roleNames;
+	/**
 	 * 角色集合
 	 */
 	private List<Role> roleList;
@@ -170,12 +174,20 @@ public class User implements Serializable {
 		this.roleList = roleList;
 	}
 
+	public String getRoleNames() {
+		return roleNames;
+	}
+
+	public void setRoleNames(String roleNames) {
+		this.roleNames = roleNames;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", age=" + age + ", password=" + password + ", email=" + email
 				+ ", createDate=" + createDate + ", updateDate=" + updateDate + ", hobby=" + hobby + ", status="
 				+ status + ", account=" + account + ", userType=" + userType + ", sex=" + sex + ", bak1=" + bak1
-				+ ", bak2=" + bak2 + ", bak3=" + bak3 + ", roleIds =" + roleIds + "]";
+				+ ", bak2=" + bak2 + ", bak3=" + bak3 + ", roleIds=" + roleIds + ", roleNames=" + roleNames + "]";
 	}
 
 }

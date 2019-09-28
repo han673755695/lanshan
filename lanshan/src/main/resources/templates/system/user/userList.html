@@ -44,9 +44,15 @@
 							</form>
 						</div>
 						<div class="layui-card-header">
-							<button type="button" class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-							<button type="button" class="layui-btn" onclick="xadmin.open('添加用户','${base}/s/user/update/pre',600,400)"><i class="layui-icon"></i>添加</button>
-							<button type="button" class="layui-btn layui-btn-warm" onclick="exportExcel()"><i class="layui-icon">&#xe601;</i>导出</button>
+							<@shiro.hasPermission name="/s/user/delete" >
+								<button type="button" class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+							</@shiro.hasPermission>
+							<@shiro.hasPermission name="/s/user/update" >
+								<button type="button" class="layui-btn" onclick="xadmin.open('添加用户','${base}/s/user/update/pre',600,400)"><i class="layui-icon"></i>添加</button>
+							</@shiro.hasPermission>
+							<@shiro.hasPermission name="/s/user/list/export" >
+								<button type="button" class="layui-btn layui-btn-warm" onclick="exportExcel()"><i class="layui-icon">&#xe601;</i>导出</button>
+							</@shiro.hasPermission>
 						</div>
 						<div class="layui-card-body layui-table-body layui-table-main">
 							<!--start_export-->
@@ -95,7 +101,7 @@
 												
 												<td>${(user.name)!''}</td>
 												<td>${(user.account)!''}</td>
-												<td>${(user.account)!''}</td>
+												<td>${(user.roleNames)!''}</td>
 												<td>${(user.sex)!''}</td>
 												<td>${((user.createDate)?string('yyyy-MM-dd HH:mm:ss'))!''}</td>
 												<td>
