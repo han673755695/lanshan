@@ -126,57 +126,57 @@
 		insert into t_user_role
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 		
-					<if test="id != null">
-						id,
-					</if>
-					<if test="userId != null">
-						userId,
-					</if>
-					<if test="roleId != null">
-						roleId,
-					</if>
-					<if test="createUser != null">
-						createUser,
-					</if>
-					<if test="createDate != null">
-						createDate,
-					</if>
-					<if test="updateUser != null">
-						updateUser,
-					</if>
-					<if test="updateDate != null">
-						updateDate,
-					</if>
-					<if test="active != null">
-						active,
-					</if>
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				userId,
+			</if>
+			<if test="roleId != null">
+				roleId,
+			</if>
+			<if test="createUser != null">
+				createUser,
+			</if>
+			<if test="createDate != null">
+				createDate,
+			</if>
+			<if test="updateUser != null">
+				updateUser,
+			</if>
+			<if test="updateDate != null">
+				updateDate,
+			</if>
+			<if test="active != null">
+				active,
+			</if>
 			
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-					<if test="id != null">
-						#{id},
-					</if>
-					<if test="userId != null">
-						#{userId},
-					</if>
-					<if test="roleId != null">
-						#{roleId},
-					</if>
-					<if test="createUser != null">
-						#{createUser},
-					</if>
-					<if test="createDate != null">
-						#{createDate},
-					</if>
-					<if test="updateUser != null">
-						#{updateUser},
-					</if>
-					<if test="updateDate != null">
-						#{updateDate},
-					</if>
-					<if test="active != null">
-						#{active},
-					</if>
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="userId != null">
+				#{userId},
+			</if>
+			<if test="roleId != null">
+				#{roleId},
+			</if>
+			<if test="createUser != null">
+				#{createUser},
+			</if>
+			<if test="createDate != null">
+				#{createDate},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate},
+			</if>
+			<if test="active != null">
+				#{active},
+			</if>
 		</trim>
 	</insert>
 	
@@ -184,27 +184,27 @@
 	<update id="updateActiveUserRole" parameterType="map">
 		update t_user_role
 		<set>
-						<if test="userId != null">
-							userId = #{userId},
-						</if>
-						<if test="roleId != null">
-							roleId = #{roleId},
-						</if>
-						<if test="createUser != null">
-							createUser = #{createUser},
-						</if>
-						<if test="createDate != null">
-							createDate = #{createDate},
-						</if>
-						<if test="updateUser != null">
-							updateUser = #{updateUser},
-						</if>
-						<if test="updateDate != null">
-							updateDate = #{updateDate},
-						</if>
-						<if test="active != null">
-							active = #{active},
-						</if>
+			<if test="userId != null">
+				userId = #{userId},
+			</if>
+			<if test="roleId != null">
+				roleId = #{roleId},
+			</if>
+			<if test="createUser != null">
+				createUser = #{createUser},
+			</if>
+			<if test="createDate != null">
+				createDate = #{createDate},
+			</if>
+			<if test="updateUser != null">
+				updateUser = #{updateUser},
+			</if>
+			<if test="updateDate != null">
+				updateDate = #{updateDate},
+			</if>
+			<if test="active != null">
+				active = #{active},
+			</if>
 		</set>
 		WHERE
 		id=#{id,jdbcType=VARCHAR}
@@ -215,13 +215,13 @@
 	<update id="updateUserRole" parameterType="map">
 		update t_user_role
 		set 
-					userId = #{userId},
-					roleId = #{roleId},
-					createUser = #{createUser},
-					createDate = #{createDate},
-					updateUser = #{updateUser},
-					updateDate = #{updateDate},
-					active = #{active}
+			userId = #{userId},
+			roleId = #{roleId},
+			createUser = #{createUser},
+			createDate = #{createDate},
+			updateUser = #{updateUser},
+			updateDate = #{updateDate},
+			active = #{active}
 		WHERE
 		id=#{id}
 	</update>

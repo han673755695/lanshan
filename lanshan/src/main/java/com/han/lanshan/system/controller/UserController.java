@@ -22,9 +22,13 @@ import com.han.lanshan.system.common.GlobalStatic;
 import com.han.lanshan.system.common.Page;
 import com.han.lanshan.system.common.ReturnData;
 import com.han.lanshan.system.constant.SystemEnum;
+import com.han.lanshan.system.entry.Org;
 import com.han.lanshan.system.entry.Role;
 import com.han.lanshan.system.entry.User;
+import com.han.lanshan.system.entry.UserOrg;
+import com.han.lanshan.system.service.IOrgService;
 import com.han.lanshan.system.service.IRoleService;
+import com.han.lanshan.system.service.IUserOrgService;
 import com.han.lanshan.system.service.IUserRoleService;
 import com.han.lanshan.system.service.IUserService;
 
@@ -40,6 +44,10 @@ public class UserController extends BaseController {
 	private IRoleService roleService;
 	@Autowired
 	private IUserRoleService userRoleService;
+	@Resource
+	private IOrgService orgService;
+	@Resource
+	private IUserOrgService userOrgService;
 	
 	/**
 	 * 列表
@@ -54,7 +62,6 @@ public class UserController extends BaseController {
 		user.setStatus(SystemEnum.ActiveEnum.可用.getValue());
 		ReturnData returnObject = listjson(request, model, user);
 		model.addAttribute(GlobalStatic.returnDatas, returnObject);
-		model.addAttribute("(roleList", returnObject);
 		return "/system/user/userList";
 	}
 	
@@ -88,6 +95,22 @@ public class UserController extends BaseController {
 					}
 				}
 				user2.setRoleNames(roleNames);
+				
+				//该用户的所有部门
+				List<Org> findUserOrgByUserId = userOrgService.findUserOrgByUserId(user2.getId());
+				String orgNames = "";
+				if (CollectionUtils.isNotEmpty(findUserOrgByUserId)) {
+					for (int i = 0; i < findUserOrgByUserId.size(); i++) {
+						Org org = findUserOrgByUserId.get(i);
+						if (i == 0) {
+							orgNames += org.getOrgName();
+						}else {
+							orgNames += "," + org.getOrgName();
+						}
+					}
+				}
+				user2.setOrgNames(orgNames);
+				
 			}
 			
 			
@@ -243,6 +266,11 @@ public class UserController extends BaseController {
 			role.setActive(SystemEnum.ActiveEnum.可用.getValue());
 			//所有的可用角色
 			List<Role> roleList = roleService.findRoleList(role, null);
+			
+			Org org = new Org();
+			org.setActive(SystemEnum.ActiveEnum.可用.getValue());
+			//所有的部门
+			List<Org> findOrgList = orgService.findOrgList(org, null);
 			//该用户的角色
 			List<Map<String, String>> findUserRoleByUserId = userRoleService.findUserRoleByUserId(id);
 			String roleIds = "";
@@ -256,8 +284,24 @@ public class UserController extends BaseController {
 				}
 			}
 			
+			//该用户的所有部门
+			List<Org> findUserOrgByUserId = userOrgService.findUserOrgByUserId(id);
+			String orgIds = "";
+			if (CollectionUtils.isNotEmpty(findUserOrgByUserId)) {
+				for (int i = 0; i < findUserOrgByUserId.size(); i++) {
+					Org org2 = findUserOrgByUserId.get(i);
+					if (i == 0) {
+						orgIds += org2.getId();
+					}else {
+						orgIds += "," + org2.getId();
+					}
+				}
+			}
+			
 			model.addAttribute("roleList", roleList);
+			model.addAttribute("orgList", findOrgList);
 			model.addAttribute("roleIds", roleIds);
+			model.addAttribute("orgIds", orgIds);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());

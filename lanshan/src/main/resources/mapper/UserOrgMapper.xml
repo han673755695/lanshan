@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.han.lanshan.system.dao.UserOrgMapper">
+	<!-- 数据库字段映射 -->
+	<resultMap id="BaseResultMap"
+		type="com.han.lanshan.system.entry.UserOrg">
+		
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="orgId" property="orgId" />
+		<result column="userId" property="userId" />
+		<result column="createUser" property="createUser" />
+		<result column="createDate" property="createDate" />
+		<result column="updateUser" property="updateUser" />
+		<result column="updateDate" property="updateDate" />
+		<result column="active" property="active" />
+		<result column="bak1" property="bak1" />
+		<result column="bak2" property="bak2" />
+		<result column="bak3" property="bak3" />
+	    
+	</resultMap>
+	
+	
+	<resultMap id="OrgMap"
+		type="com.han.lanshan.system.entry.Org">
+		
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="orgName" property="orgName" />
+		<result column="describe" property="describe" />
+		<result column="createUser" property="createUser" />
+		<result column="createDate" property="createDate" />
+		<result column="updateUser" property="updateUser" />
+		<result column="updateDate" property="updateDate" />
+		<result column="active" property="active" />
+		<result column="bak1" property="bak1" />
+		<result column="bak2" property="bak2" />
+		<result column="bak3" property="bak3" />
+	    
+	</resultMap>
+	
+	
+	<!-- 基础的数据库字段 -->
+	<sql id="Base_Column_List">
+		id,
+		orgId,
+		userId,
+		createUser,
+		createDate,
+		updateUser,
+		updateDate,
+		active,
+		bak1,
+		bak2,
+		bak3
+	</sql>
+	
+	
+	<!-- 根据主键获取信息 -->
+	<select id="findUserOrgById" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_org
+		where id = #{id}
+	</select>
+	
+	
+	<!-- 根据实体类获取集合 -->
+	<select id="findUserOrgList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_org
+		where 1=1
+		<if test="userOrg.id != null and userOrg.id != '' ">
+				and id = #{userOrg.id}
+		</if>
+		<if test="userOrg.orgId != null and userOrg.orgId != '' ">
+				and orgId = #{userOrg.orgId}
+		</if>
+		<if test="userOrg.userId != null and userOrg.userId != '' ">
+				and userId = #{userOrg.userId}
+		</if>
+		<if test="userOrg.createUser != null and userOrg.createUser != '' ">
+				and createUser = #{userOrg.createUser}
+		</if>
+		<if test="userOrg.createDate != null and userOrg.createDate != '' ">
+				and DATE_FORMAT(createDate,'%Y-%m-%d') = DATE_FORMAT(#{userOrg.createDate},'%Y-%m-%d')
+		</if>
+		<if test="userOrg.updateUser != null and userOrg.updateUser != '' ">
+				and updateUser = #{userOrg.updateUser}
+		</if>
+		<if test="userOrg.updateDate != null and userOrg.updateDate != '' ">
+				and DATE_FORMAT(updateDate,'%Y-%m-%d') = DATE_FORMAT(#{userOrg.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="userOrg.active != null and userOrg.active != '' ">
+				and active = #{userOrg.active}
+		</if>
+		<if test="userOrg.bak1 != null and userOrg.bak1 != '' ">
+				and bak1 = #{userOrg.bak1}
+		</if>
+		<if test="userOrg.bak2 != null and userOrg.bak2 != '' ">
+				and bak2 = #{userOrg.bak2}
+		</if>
+		<if test="userOrg.bak3 != null and userOrg.bak3 != '' ">
+				and bak3 = #{userOrg.bak3}
+		</if>
+		ORDER BY id
+		<if test="page != null and page.current != null and page.pageSize != null ">
+			limit #{page.current},#{page.pageSize}
+		</if>
+	</select>
+	
+	
+	<!-- 根据实体类获取Count数量 -->
+	<select id="findUserOrgCount" resultType="int">
+		select
+		count(id) totalCount
+		from t_user_org
+		where 1=1
+		<if test="userOrg.id != null and userOrg.id != '' ">
+				and id = #{userOrg.id}
+		</if>
+		<if test="userOrg.orgId != null and userOrg.orgId != '' ">
+				and orgId = #{userOrg.orgId}
+		</if>
+		<if test="userOrg.userId != null and userOrg.userId != '' ">
+				and userId = #{userOrg.userId}
+		</if>
+		<if test="userOrg.createUser != null and userOrg.createUser != '' ">
+				and createUser = #{userOrg.createUser}
+		</if>
+		<if test="userOrg.createDate != null and userOrg.createDate != '' ">
+				and DATE_FORMAT(createDate,'%Y-%m-%d') = DATE_FORMAT(#{userOrg.createDate},'%Y-%m-%d')
+		</if>
+		<if test="userOrg.updateUser != null and userOrg.updateUser != '' ">
+				and updateUser = #{userOrg.updateUser}
+		</if>
+		<if test="userOrg.updateDate != null and userOrg.updateDate != '' ">
+				and DATE_FORMAT(updateDate,'%Y-%m-%d') = DATE_FORMAT(#{userOrg.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="userOrg.active != null and userOrg.active != '' ">
+				and active = #{userOrg.active}
+		</if>
+		<if test="userOrg.bak1 != null and userOrg.bak1 != '' ">
+				and bak1 = #{userOrg.bak1}
+		</if>
+		<if test="userOrg.bak2 != null and userOrg.bak2 != '' ">
+				and bak2 = #{userOrg.bak2}
+		</if>
+		<if test="userOrg.bak3 != null and userOrg.bak3 != '' ">
+				and bak3 = #{userOrg.bak3}
+		</if>
+	</select>
+	
+	
+	<!-- 根据id删除数据 -->
+	<update id="deleteUserOrg">
+		delete from t_user_org
+		where id in 
+		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+	
+	
+	<!-- 动态添加数据 -->
+	<insert id="saveUserOrg"
+		parameterType="com.han.lanshan.system.entry.UserOrg">
+		insert into t_user_org
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		
+			<if test="id != null">
+				id,
+			</if>
+			<if test="orgId != null">
+				orgId,
+			</if>
+			<if test="userId != null">
+				userId,
+			</if>
+			<if test="createUser != null">
+				createUser,
+			</if>
+			<if test="createDate != null">
+				createDate,
+			</if>
+			<if test="updateUser != null">
+				updateUser,
+			</if>
+			<if test="updateDate != null">
+				updateDate,
+			</if>
+			<if test="active != null">
+				active,
+			</if>
+			<if test="bak1 != null">
+				bak1,
+			</if>
+			<if test="bak2 != null">
+				bak2,
+			</if>
+			<if test="bak3 != null">
+				bak3,
+			</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="orgId != null">
+				#{orgId},
+			</if>
+			<if test="userId != null">
+				#{userId},
+			</if>
+			<if test="createUser != null">
+				#{createUser},
+			</if>
+			<if test="createDate != null">
+				#{createDate},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate},
+			</if>
+			<if test="active != null">
+				#{active},
+			</if>
+			<if test="bak1 != null">
+				#{bak1},
+			</if>
+			<if test="bak2 != null">
+				#{bak2},
+			</if>
+			<if test="bak3 != null">
+				#{bak3},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 动态修改数据 -->
+	<update id="updateActiveUserOrg" parameterType="map">
+		update t_user_org
+		<set>
+			<if test="orgId != null">
+				orgId = #{orgId},
+			</if>
+			<if test="userId != null">
+				userId = #{userId},
+			</if>
+			<if test="createUser != null">
+				createUser = #{createUser},
+			</if>
+			<if test="createDate != null">
+				createDate = #{createDate},
+			</if>
+			<if test="updateUser != null">
+				updateUser = #{updateUser},
+			</if>
+			<if test="updateDate != null">
+				updateDate = #{updateDate},
+			</if>
+			<if test="active != null">
+				active = #{active},
+			</if>
+			<if test="bak1 != null">
+				bak1 = #{bak1},
+			</if>
+			<if test="bak2 != null">
+				bak2 = #{bak2},
+			</if>
+			<if test="bak3 != null">
+				bak3 = #{bak3},
+			</if>
+		</set>
+		WHERE
+		id=#{id,jdbcType=VARCHAR}
+		
+	</update>
+	
+	<!-- 修改数据 -->
+	<update id="updateUserOrg" parameterType="map">
+		update t_user_org
+		set 
+			orgId = #{orgId},
+			userId = #{userId},
+			createUser = #{createUser},
+			createDate = #{createDate},
+			updateUser = #{updateUser},
+			updateDate = #{updateDate},
+			active = #{active},
+			bak1 = #{bak1},
+			bak2 = #{bak2},
+			bak3 = #{bak3}
+		WHERE
+		id=#{id}
+	</update>
+	
+	
+	<!-- 根据用户id获取用户的所有部门 -->
+	<select id="findUserOrgByUserId" resultMap="OrgMap">
+		SELECT
+			o.*
+		FROM
+			`t_user_org` uo,
+			t_org o
+		WHERE
+			uo.orgId = o.id
+		AND O.active = 1
+		AND uo.active = 1
+		AND uo.userId = #{userId};
+	</select>
+	
+</mapper>

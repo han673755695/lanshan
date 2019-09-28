@@ -52,10 +52,26 @@
 					</div>
 					<div class="layui-form-item">
 						<label for="L_age" class="layui-form-label">
-                            <span class="x-red">*</span>年龄
+                            <span class="x-red">*</span>部门
                         </label>
 						<div class="layui-input-inline">
-							<input type="text" value="${(returnDatas.data.age)!''}" id="L_age" name="age" required="" lay-verify="number" autocomplete="off" class="layui-input">
+							<input type="hidden" name="orgIds" id="orgIds" value="" lay-verify="required"/>
+							<select class="layui-input-inline" id="orgId" name="orgId" multiple="multiple">
+	                            <option value="">请选择</option>
+	                            <#if (orgList??) && (orgList?size>0)>
+	                            	<#list orgList as org>
+	                            		<option value="${(org.id)!''}">${(org.orgName)!''}</option>
+	                            	</#list>
+	                            </#if>
+	                        </select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label for="L_age" class="layui-form-label">
+                            <span class="x-red"></span>年龄
+                        </label>
+						<div class="layui-input-inline">
+							<input type="number" value="${(returnDatas.data.age)!''}" id="L_age" name="age" autocomplete="off" class="layui-input">
 						</div>
 					</div>
 					<div class="layui-form-item">
@@ -125,11 +141,22 @@
 					return false;
 				});
 				
+				//角色
 				var roleIds = "${(roleIds)!''}"
 				if(!isNull(roleIds)){
 					var roleId = roleIds.split(",");
 					$('#roleId').val(roleId).trigger('change');
 					$("#roleIds").val(roleIds);
+				}
+				
+				//部门
+				var orgIds = "${(orgIds)!''}"
+				if(!isNull(orgIds)){
+					debugger;
+					console.log("orgIds123: " + orgIds)
+					var orgId = orgIds.split(",");
+					$('#orgId').val(orgId).trigger('change');
+					$("#orgIds").val(orgIds);
 				}
 				
 				var userType = "${(returnDatas.data.userType)!''}";
@@ -146,10 +173,12 @@
 
 			});
 			
-			
+			//角色
 			$('#roleId').select2();
+			//部门
+			$('#orgId').select2();
 			
-			 $('#roleId').change(function(){
+			$('#roleId').change(function(){
 	             var o=document.getElementById('roleId').getElementsByTagName('option');
 	             var all="";
 	             for(var i=0;i<o.length;i++){
@@ -160,7 +189,22 @@
 	             
 	             all = all.substr(0, all.length - 1);//去掉末尾的逗号
 	             $("#roleIds").val(all);//赋值给隐藏的文本框
-	         })
+	        })
+	 
+	 		//部门
+	 		$('#orgId').change(function(){
+	             var o=document.getElementById('orgId').getElementsByTagName('option');
+	             var all="";
+	             for(var i=0;i<o.length;i++){
+	                 if(o[i].selected){
+	                     all+=o[i].value+",";
+	                 }
+	             }
+	             
+	             all = all.substr(0, all.length - 1);//去掉末尾的逗号
+	             $("#orgIds").val(all);//赋值给隐藏的文本框
+	 			//console.log("orgIds: " + $("#orgIds").val())
+	        })
 			
 		</script>
 	</body>

@@ -38,6 +38,19 @@ public class User implements Serializable {
 	 */
 	private List<Role> roleList;
 
+	/**
+	 * 部门ids
+	 */
+	private String orgIds;
+	/**
+	 * 部门名称
+	 */
+	private String orgNames;
+	/**
+	 * 部门集合
+	 */
+	private List<Org> orgList;
+
 	public String getId() {
 		return id;
 	}
@@ -182,12 +195,37 @@ public class User implements Serializable {
 		this.roleNames = roleNames;
 	}
 
+	public String getOrgIds() {
+		return orgIds;
+	}
+
+	public void setOrgIds(String orgIds) {
+		this.orgIds = orgIds;
+	}
+
+	public String getOrgNames() {
+		return orgNames;
+	}
+
+	public void setOrgNames(String orgNames) {
+		this.orgNames = orgNames;
+	}
+
+	public List<Org> getOrgList() {
+		return orgList;
+	}
+
+	public void setOrgList(List<Org> orgList) {
+		this.orgList = orgList;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", age=" + age + ", password=" + password + ", email=" + email
 				+ ", createDate=" + createDate + ", updateDate=" + updateDate + ", hobby=" + hobby + ", status="
 				+ status + ", account=" + account + ", userType=" + userType + ", sex=" + sex + ", bak1=" + bak1
-				+ ", bak2=" + bak2 + ", bak3=" + bak3 + ", roleIds=" + roleIds + ", roleNames=" + roleNames + "]";
+				+ ", bak2=" + bak2 + ", bak3=" + bak3 + ", roleIds=" + roleIds + ", roleNames=" + roleNames
+				+ ", orgIds=" + orgIds + ", orgNames=" + orgNames + "]";
 	}
 
 }

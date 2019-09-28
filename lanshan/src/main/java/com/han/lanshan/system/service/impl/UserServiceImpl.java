@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,9 @@ import com.han.lanshan.system.common.SessionUser;
 import com.han.lanshan.system.constant.SystemEnum;
 import com.han.lanshan.system.dao.UserMapper;
 import com.han.lanshan.system.entry.User;
+import com.han.lanshan.system.entry.UserOrg;
 import com.han.lanshan.system.entry.UserRole;
+import com.han.lanshan.system.service.IUserOrgService;
 import com.han.lanshan.system.service.IUserRoleService;
 import com.han.lanshan.system.service.IUserService;
 import com.han.lanshan.system.utils.SecUtils;
@@ -29,6 +33,8 @@ public class UserServiceImpl extends BaseServiceImpl implements IUserService {
 	private UserMapper userDao;
 	@Autowired
 	private IUserRoleService userRoleService;
+	@Resource
+	private IUserOrgService userOrgService;
 	
 	/**
 	 * 导出方法调用
@@ -110,6 +116,18 @@ public class UserServiceImpl extends BaseServiceImpl implements IUserService {
 				
 				userRoleService.deleteUserRole(idList);
 				
+				//删除原有的部门信息
+				UserOrg userOrg = new UserOrg();
+				userOrg.setActive(SystemEnum.ActiveEnum.可用.getValue());
+				userOrg.setUserId(user.getId());
+				List<UserOrg> findUserOrgList = userOrgService.findUserOrgList(userOrg, null);
+				List<String> userOrgIdList = new ArrayList<String>();
+				for (UserOrg userOrg2 : findUserOrgList) {
+					userOrgIdList.add(userOrg2.getId());
+				}
+				
+				userOrgService.deleteUserOrg(userOrgIdList);
+				
 			}
 			
 			//更新角色信息
@@ -132,6 +150,26 @@ public class UserServiceImpl extends BaseServiceImpl implements IUserService {
 			}
 			if (CollectionUtils.isNotEmpty(userRoleList)) {
 				userRoleService.saveUserRoleList(userRoleList);
+			}
+			
+			//保存部门
+			List<UserOrg> userOrgList = new ArrayList<UserOrg>();
+			if (StringUtils.isNotBlank(user.getOrgIds())) {
+				String[] orgIdArr = user.getOrgIds().split(",");
+				for (String orgId : orgIdArr) {
+					UserOrg userOrg = new UserOrg();
+					userOrg.setId(UUIDUtils.getUUID());
+					userOrg.setOrgId(orgId);
+					userOrg.setUserId(user.getId());
+					userOrg.setCreateDate(new Date());
+					userOrg.setCreateUser(userId);
+					userOrg.setActive(SystemEnum.ActiveEnum.可用.getValue());
+					userOrgList.add(userOrg);
+				}
+			}
+			
+			if (CollectionUtils.isNotEmpty(userOrgList)) {
+				userOrgService.saveUserOrgList(userOrgList);
 			}
 			
 		} catch (Exception e) {

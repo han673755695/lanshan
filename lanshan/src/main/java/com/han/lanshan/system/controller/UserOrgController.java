@@ -19,17 +19,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.han.lanshan.system.common.GlobalStatic;
 import com.han.lanshan.system.common.Page;
 import com.han.lanshan.system.common.ReturnData;
-import com.han.lanshan.system.entry.Org;
-import com.han.lanshan.system.service.IOrgService;
+import com.han.lanshan.system.entry.UserOrg;
+import com.han.lanshan.system.service.IUserOrgService;
 
 @Controller
-@RequestMapping("/s/org")
-public class OrgController extends BaseController {
+@RequestMapping("/s/userOrg")
+public class UserOrgController extends BaseController {
 
-	private static final Logger logger = LoggerFactory.getLogger(OrgController.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserOrgController.class);
 	
 	@Resource
-	private IOrgService orgService;
+	private IUserOrgService userOrgService;
 	
 	/**
 	 * 列表
@@ -40,10 +40,10 @@ public class OrgController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public String list(HttpServletRequest request, Model model, Org org) {
-		ReturnData returnObject = listjson(request, model, org);
+	public String list(HttpServletRequest request, Model model, UserOrg userOrg) {
+		ReturnData returnObject = listjson(request, model, userOrg);
 		model.addAttribute(GlobalStatic.returnDatas, returnObject);
-		return "/system/org/orgList";
+		return "/system/userOrg/userOrgList";
 	}
 	
 	
@@ -55,15 +55,15 @@ public class OrgController extends BaseController {
 	 */
 	@RequestMapping("/list/json")
 	@ResponseBody
-	public ReturnData listjson(HttpServletRequest request, Model model, Org org) {
+	public ReturnData listjson(HttpServletRequest request, Model model, UserOrg userOrg) {
 		ReturnData returnData = ReturnData.getSuccess();
 		
 		try {
 			Page page = Page.getPage(request);
-			List<Org> datas = orgService.findOrgList(org, page);
-			int totalCount = orgService.findOrgCount(org, page);
+			List<UserOrg> datas = userOrgService.findUserOrgList(userOrg, page);
+			int totalCount = userOrgService.findUserOrgCount(userOrg, page);
 			page.setTotalCount(totalCount);
-			returnData.setQueryParams(org);
+			returnData.setQueryParams(userOrg);
 			returnData.setPage(page);
 			returnData.setData(datas);
 		} catch (Exception e) {
@@ -86,11 +86,11 @@ public class OrgController extends BaseController {
 	 * @param 
 	 */
 	@RequestMapping("/list/export")
-	public void listexport(HttpServletRequest request, HttpServletResponse response, Model model, Org org) {
+	public void listexport(HttpServletRequest request, HttpServletResponse response, Model model, UserOrg userOrg) {
 		try {
 			Page page = Page.getPage(request);
-			File file = orgService.findDataExportExcel("/system/org/orgList", page, Org.class, org);
-			String fileName="org" + GlobalStatic.excelext;
+			File file = userOrgService.findDataExportExcel("/system/userOrg/userOrgList", page, UserOrg.class, userOrg);
+			String fileName="userOrg" + GlobalStatic.excelext;
 			downFile(response, file, fileName, true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +111,7 @@ public class OrgController extends BaseController {
 	public String look(Model model, HttpServletRequest request, HttpServletResponse response) {
 		ReturnData returnObject = lookjson(model, request, response);
 		model.addAttribute(GlobalStatic.returnDatas, returnObject);
-		return "/system/org/orgLook";
+		return "/system/userOrg/userOrgLook";
 	}
 	
 	/**
@@ -129,8 +129,8 @@ public class OrgController extends BaseController {
 		try {
 			java.lang.String id = request.getParameter("id");
 			if (StringUtils.isNotBlank(id)) {
-				Org org = orgService.findOrgById(id);
-				returnObject.setData(org);
+				UserOrg userOrg = userOrgService.findUserOrgById(id);
+				returnObject.setData(userOrg);
 			}else{
 				returnObject.setStatus(ReturnData.ERROR);
 			}
@@ -153,15 +153,15 @@ public class OrgController extends BaseController {
 	 */
 	@RequestMapping("/update")
 	@ResponseBody      
-	public ReturnData saveorupdate(Model model, Org org, HttpServletRequest request, HttpServletResponse response) {
+	public ReturnData saveorupdate(Model model, UserOrg userOrg, HttpServletRequest request, HttpServletResponse response) {
 		ReturnData returnObject = ReturnData.getSuccess();
 		try {
-			java.lang.String id =org.getId();
+			java.lang.String id =userOrg.getId();
 			if(StringUtils.isBlank(id)){
-				org.setId(null);
+				userOrg.setId(null);
 			}
 			
-			orgService.saveorupdateOrg(org, true);
+			userOrgService.saveorupdateUserOrg(userOrg, true);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -192,7 +192,7 @@ public class OrgController extends BaseController {
 			logger.error(e.getMessage());
 		}
 		
-		return "/system/org/orgCru";
+		return "/system/userOrg/userOrgCru";
 	}
 	
 	/**
@@ -210,7 +210,7 @@ public class OrgController extends BaseController {
 			String ids=request.getParameter("ids");
 			if(StringUtils.isNotBlank(ids)){
 				String[] idsArr = ids.split(",");
-			 	orgService.deleteOrg(Arrays.asList(idsArr));
+			 	userOrgService.deleteUserOrg(Arrays.asList(idsArr));
 			} else {
 				returnObject.setStatus(ReturnData.ERROR);
 				returnObject.setMessage("删除失败");
