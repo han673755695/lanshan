@@ -8,6 +8,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.han.lanshan.system.common.Page;
 import com.han.lanshan.system.constant.SystemEnum;
@@ -18,6 +19,7 @@ import com.han.lanshan.system.utils.UUIDUtils;
 
 
 @Service
+@Transactional
 public class MenuServiceImpl extends BaseServiceImpl implements IMenuService {
 
 	@Autowired

@@ -1,10 +1,8 @@
-package com.han.lanshan.system.controller;
+package com.han.lanshan.task.controller;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -15,24 +13,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.han.lanshan.system.common.GlobalStatic;
 import com.han.lanshan.system.common.Page;
 import com.han.lanshan.system.common.ReturnData;
-import com.han.lanshan.system.entry.DicData;
-import com.han.lanshan.system.service.IDicDataService;
+import com.han.lanshan.system.controller.BaseController;
+import com.han.lanshan.task.entry.JobLog;
+import com.han.lanshan.task.service.IJobLogService;
 
 @Controller
-@RequestMapping("/s/dicData/{pathtypekey}")
-public class DicDataController extends BaseController {
+@RequestMapping("/s/jobLog")
+public class JobLogController extends BaseController {
 
-	private static final Logger logger = LoggerFactory.getLogger(DicDataController.class);
+	private static final Logger logger = LoggerFactory.getLogger(JobLogController.class);
 	
 	@Resource
-	private IDicDataService dicDataService;
+	private IJobLogService jobLogService;
 	
 	/**
 	 * 列表
@@ -43,10 +41,10 @@ public class DicDataController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public String list(@PathVariable String pathtypekey,HttpServletRequest request, Model model, DicData dicData) {
-		ReturnData returnObject = listjson(pathtypekey, request, model, dicData);
+	public String list(HttpServletRequest request, Model model, JobLog jobLog) {
+		ReturnData returnObject = listjson(request, model, jobLog);
 		model.addAttribute(GlobalStatic.returnDatas, returnObject);
-		return "/system/dicData/dicDataList";
+		return "/system/jobLog/jobLogList";
 	}
 	
 	
@@ -58,21 +56,17 @@ public class DicDataController extends BaseController {
 	 */
 	@RequestMapping("/list/json")
 	@ResponseBody
-	public ReturnData listjson(@PathVariable String pathtypekey,HttpServletRequest request, Model model, DicData dicData) {
+	public ReturnData listjson(HttpServletRequest request, Model model, JobLog jobLog) {
 		ReturnData returnData = ReturnData.getSuccess();
 		
 		try {
 			Page page = Page.getPage(request);
-			List<DicData> datas = dicDataService.findDicDataList(dicData, page);
-			int totalCount = dicDataService.findDicDataCount(dicData, page);
+			List<JobLog> datas = jobLogService.findJobLogList(jobLog, page);
+			int totalCount = jobLogService.findJobLogCount(jobLog, page);
 			page.setTotalCount(totalCount);
-			returnData.setQueryParams(dicData);
+			returnData.setQueryParams(jobLog);
 			returnData.setPage(page);
 			returnData.setData(datas);
-			
-			Map<String, Object> dataMap = new HashMap<String, Object>();
-			dataMap.put("typekey", pathtypekey);
-			returnData.setMap(dataMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
@@ -93,11 +87,11 @@ public class DicDataController extends BaseController {
 	 * @param 
 	 */
 	@RequestMapping("/list/export")
-	public void listexport(HttpServletRequest request, HttpServletResponse response, Model model, DicData dicData) {
+	public void listexport(HttpServletRequest request, HttpServletResponse response, Model model, JobLog jobLog) {
 		try {
 			Page page = Page.getPage(request);
-			File file = dicDataService.findDataExportExcel("/system/dicData/dicDataList", page, DicData.class, dicData);
-			String fileName="dicData" + GlobalStatic.excelext;
+			File file = jobLogService.findDataExportExcel("/system/jobLog/jobLogList", page, JobLog.class, jobLog);
+			String fileName="jobLog" + GlobalStatic.excelext;
 			downFile(response, file, fileName, true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -115,10 +109,10 @@ public class DicDataController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/look")
-	public String look(@PathVariable String pathtypekey, Model model, HttpServletRequest request, HttpServletResponse response) {
-		ReturnData returnObject = lookjson(pathtypekey, model, request, response);
+	public String look(Model model, HttpServletRequest request, HttpServletResponse response) {
+		ReturnData returnObject = lookjson(model, request, response);
 		model.addAttribute(GlobalStatic.returnDatas, returnObject);
-		return "/system/dicData/dicDataLook";
+		return "/system/jobLog/jobLogLook";
 	}
 	
 	/**
@@ -131,13 +125,13 @@ public class DicDataController extends BaseController {
 	 */
 	@RequestMapping(value = "/look/json")
 	@ResponseBody      
-	public ReturnData lookjson(@PathVariable String pathtypekey, Model model,HttpServletRequest request,HttpServletResponse response) {
+	public ReturnData lookjson(Model model,HttpServletRequest request,HttpServletResponse response) {
 		ReturnData returnObject = ReturnData.getSuccess();
 		try {
 			java.lang.String id = request.getParameter("id");
 			if (StringUtils.isNotBlank(id)) {
-				DicData dicData = dicDataService.findDicDataById(id);
-				returnObject.setData(dicData);
+				JobLog jobLog = jobLogService.findJobLogById(id);
+				returnObject.setData(jobLog);
 			}else{
 				returnObject.setStatus(ReturnData.ERROR);
 			}
@@ -160,15 +154,15 @@ public class DicDataController extends BaseController {
 	 */
 	@RequestMapping("/update")
 	@ResponseBody      
-	public ReturnData saveorupdate(Model model, DicData dicData, HttpServletRequest request, HttpServletResponse response) {
+	public ReturnData saveorupdate(Model model, JobLog jobLog, HttpServletRequest request, HttpServletResponse response) {
 		ReturnData returnObject = ReturnData.getSuccess();
 		try {
-			java.lang.String id =dicData.getId();
+			java.lang.String id =jobLog.getId();
 			if(StringUtils.isBlank(id)){
-				dicData.setId(null);
+				jobLog.setId(null);
 			}
 			
-			dicDataService.saveorupdateDicData(dicData, true);
+			jobLogService.saveorupdateJobLog(jobLog, true);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -190,19 +184,16 @@ public class DicDataController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/update/pre")
-	public String updatepre(@PathVariable String pathtypekey, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String updatepre(Model model, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			ReturnData returnObject = lookjson(pathtypekey, model, request, response);
-			Map<String, Object> dataMap = new HashMap<String, Object>();
-			dataMap.put("typekey", pathtypekey);
-			returnObject.setMap(dataMap);
+			ReturnData returnObject = lookjson(model, request, response);
 			model.addAttribute(GlobalStatic.returnDatas, returnObject);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
 		
-		return "/system/dicData/dicDataCru";
+		return "/system/jobLog/jobLogCru";
 	}
 	
 	/**
@@ -220,7 +211,7 @@ public class DicDataController extends BaseController {
 			String ids=request.getParameter("ids");
 			if(StringUtils.isNotBlank(ids)){
 				String[] idsArr = ids.split(",");
-			 	dicDataService.deleteDicData(Arrays.asList(idsArr));
+			 	jobLogService.deleteJobLog(Arrays.asList(idsArr));
 			} else {
 				returnObject.setStatus(ReturnData.ERROR);
 				returnObject.setMessage("删除失败");

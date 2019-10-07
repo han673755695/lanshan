@@ -70,6 +70,7 @@ public class ShiroConfig {
 		//map.put("/s/menu/**", "anon");
 
 		map.put("/unauthorized", "anon");
+		map.put("/s/job/runJob", "anon");
 		// 自定义的拦截器 拦截
 		map.put("/s/**", "systemPermissions");
 		

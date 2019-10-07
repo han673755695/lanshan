@@ -1,7 +1,6 @@
 package com.han.lanshan;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -10,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.han.lanshan.system.utils.JsonUtils;
-import com.han.lanshan.system.utils.PinyinUtils;
 import com.han.lanshan.system.utils.SecUtils;
 import com.han.lanshan.system.utils.UUIDUtils;
 

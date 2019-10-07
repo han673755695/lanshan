@@ -1,8 +1,6 @@
-package com.han.lanshan.system.service.impl;
+package com.han.lanshan.task.service.impl;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,19 +9,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.han.lanshan.system.common.Page;
-import com.han.lanshan.system.common.SessionUser;
-import com.han.lanshan.system.dao.OrgMapper;
-import com.han.lanshan.system.entry.Org;
-import com.han.lanshan.system.service.IOrgService;
+import com.han.lanshan.system.service.impl.BaseServiceImpl;
 import com.han.lanshan.system.utils.UUIDUtils;
+import com.han.lanshan.task.dao.JobLogMapper;
+import com.han.lanshan.task.entry.JobLog;
+import com.han.lanshan.task.service.IJobLogService;
 
 
 @Service
 @Transactional
-public class OrgServiceImpl extends BaseServiceImpl implements IOrgService {
+public class JobLogServiceImpl extends BaseServiceImpl implements IJobLogService {
 
 	@Autowired
-	private OrgMapper orgDao;
+	private JobLogMapper jobLogDao;
 	
 	/**
 	 * 导出方法调用
@@ -31,16 +29,16 @@ public class OrgServiceImpl extends BaseServiceImpl implements IOrgService {
 	@Override
 	public <T> List<T> findListDataByParams(Object obj, Class<T> clazz, Page page) throws Exception {
 		
-		return (List<T>) findOrgList((Org) obj, page);
+		return (List<T>) findJobLogList((JobLog) obj, page);
 	}
 	
 
 	@Override
-	public void deleteOrg(List ids) throws Exception {
+	public void deleteJobLog(List ids) throws Exception {
 		try {
 		
 			if (CollectionUtils.isNotEmpty(ids)) {
-				orgDao.deleteOrg(ids);
+				jobLogDao.deleteJobLog(ids);
 			}
 		
 		} catch (Exception e) {
@@ -50,23 +48,18 @@ public class OrgServiceImpl extends BaseServiceImpl implements IOrgService {
 	}
 
 	@Override
-	public void saveorupdateOrg(Org org, boolean all) throws Exception {
+	public void saveorupdateJobLog(JobLog jobLog, boolean all) throws Exception {
 		try {
-			String userId = SessionUser.getUserId();
-			if (StringUtils.isBlank(org.getId())) {
+			if (StringUtils.isBlank(jobLog.getId())) {
 				String uuid = UUIDUtils.getUUID();
-				org.setId(uuid);
-				org.setCreateDate(new Date());
-				org.setCreateUser(userId);
-				orgDao.saveOrg(org);
+				jobLog.setId(uuid);
+				jobLogDao.saveJobLog(jobLog);
 			}else {
-				org.setUpdateDate(new Date());
-				org.setUpdateUser(userId);
 				if (all) {
 					//当为true时,不更新字段为null的数据
-					orgDao.updateActiveOrg(org);
+					jobLogDao.updateActiveJobLog(jobLog);
 				}else {
-					orgDao.updateOrg(org);
+					jobLogDao.updateJobLog(jobLog);
 				}
 			}
 		} catch (Exception e) {
@@ -76,10 +69,10 @@ public class OrgServiceImpl extends BaseServiceImpl implements IOrgService {
 	}
 
 	@Override
-	public void saveOrgList(List<Org> orgList) throws Exception {
+	public void saveJobLogList(List<JobLog> jobLogList) throws Exception {
 		try {
-			for (Org org : orgList) {
-				orgDao.saveOrg(org);
+			for (JobLog jobLog : jobLogList) {
+				jobLogDao.saveJobLog(jobLog);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,9 +82,9 @@ public class OrgServiceImpl extends BaseServiceImpl implements IOrgService {
 	
 	
 	@Override
-	public int findOrgCount(Org org, Page page) throws Exception {
+	public int findJobLogCount(JobLog jobLog, Page page) throws Exception {
 		try {
-			return orgDao.findOrgCount(org, page);
+			return jobLogDao.findJobLogCount(jobLog, page);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -99,9 +92,9 @@ public class OrgServiceImpl extends BaseServiceImpl implements IOrgService {
 	}
 
 	@Override
-	public List<Org> findOrgList(Org org, Page page) throws Exception {
+	public List<JobLog> findJobLogList(JobLog jobLog, Page page) throws Exception {
 		try {
-			return orgDao.findOrgList(org, page);
+			return jobLogDao.findJobLogList(jobLog, page);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();
@@ -109,9 +102,9 @@ public class OrgServiceImpl extends BaseServiceImpl implements IOrgService {
 	}
 
 	@Override
-	public Org findOrgById(String id) throws Exception {
+	public JobLog findJobLogById(String id) throws Exception {
 		try {
-			return orgDao.findOrgById(id);
+			return jobLogDao.findJobLogById(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();

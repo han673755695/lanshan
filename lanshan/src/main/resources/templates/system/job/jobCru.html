@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+	<meta charset="UTF-8">
+	<#include "../common/head.html"/>
+	<@aHead title="后台登录-X-admin2.2" />
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row">
+				<form class="layui-form">
+					<input type="hidden" value="${(returnDatas.data.id)!''}" id="id" name="id" class="layui-input">
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>任务名称</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${(returnDatas.data.jobName)!''}" id="jobName" name="jobName" required="" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>任务组名</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${(returnDatas.data.jobGroup)!''}" id="jobGroup" name="jobGroup" required="" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>调用目标字符串</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${(returnDatas.data.invokeTarget)!''}" id="invokeTarget" name="invokeTarget" required="" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>cron执行表达式</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${(returnDatas.data.cronExpression)!''}" id="cronExpression" name="cronExpression" required="" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>计划执行错误策略</label>
+						<div class="layui-input-inline">
+							<select class="layui-input-inline" value="${(returnDatas.data.misfirePolicy)!''}" id="misfirePolicy" name="misfirePolicy" required="" lay-verify="required" lay-search>
+	                            <option value="">请选择</option>
+	                            <option value="1">立即执行</option>
+	                            <option value="2">执行一次</option>
+	                            <option value="3">放弃执行</option>
+	                        </select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>是否并发执行</label>
+						<div class="layui-input-inline">
+							<select class="layui-input-inline" value="${(returnDatas.data.concurrent)!''}" id="concurrent" name="concurrent" required="" lay-verify="required" lay-search>
+	                            <option value="">请选择</option>
+	                            <option value="0">允许</option>
+	                            <option value="1">禁止</option>
+	                        </select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>状态</label>
+						<div class="layui-input-inline">
+							<select class="layui-input-inline" value="${(returnDatas.data.active)!''}" id="active" name="active" required="" lay-verify="required" lay-search>
+	                            <option value="">请选择</option>
+	                            <option value="1">开启</option>
+	                            <option value="2">关闭</option>
+	                        </select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">备注信息</label>
+						<div class="layui-input-inline">
+							<textarea rows="" cols="" id="remark" name="remark" value="${(returnDatas.data.remark)!''}"></textarea>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label for="L_repass" class="layui-form-label"></label>
+						<button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script>
+			layui.use(['form', 'layer', 'jquery'],function() {
+				var form = layui.form,
+					layer = layui.layer;
+				//自定义验证规则
+				form.verify({
+					nikename: function(value) {
+						if(value.length < 2) {
+							return '昵称至少得2个字符啊';
+						}
+					},
+					
+				});
+	
+				//监听提交
+				form.on('submit(add)',function(data) {
+						
+					xadmin.ajaxPost("${base}/s/job/update",null,data.field,null,function(){
+						//关闭当前frame
+						xadmin.close();
+						// 可以对父窗口进行刷新 
+						xadmin.father_reload();
+					});
+				
+					return false;
+				});
+				
+				
+				var active = "${(returnDatas.data.active)!''}";
+				if(!isNull(active)){
+					$("#active").val(active)
+				}
+				
+				var concurrent = "${(returnDatas.data.concurrent)!''}";
+				if(!isNull(concurrent)){
+					$("#concurrent").val(concurrent)
+				}
+				
+				var misfirePolicy = "${(returnDatas.data.misfirePolicy)!''}";
+				if(!isNull(misfirePolicy)){
+					$("#misfirePolicy").val(misfirePolicy)
+				}
+				
+				form.render();
+	
+			});
+		</script>
+	</body>
+
+</html>

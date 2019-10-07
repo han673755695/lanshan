@@ -166,12 +166,7 @@
 		    <artifactId>ehcache</artifactId>
 		</dependency>
 		
-		 <!-- <dependency>
-            <groupId>com.artofsolving</groupId>
-            <artifactId>jodconverter</artifactId>
-            <version>2.2.1</version>
-        </dependency> -->
-        
+		<!-- open Offic -->
         <dependency>
             <groupId>org.jodconverter</groupId>
             <artifactId>jodconverter-spring-boot-starter</artifactId>
@@ -183,6 +178,18 @@
             <artifactId>jsoup</artifactId>
             <version>1.11.3</version>
         </dependency>
+        
+        <!-- quartz定时器 -->
+		<dependency> 
+		    <groupId>org.quartz-scheduler</groupId>
+		    <artifactId>quartz</artifactId>
+		    <version>2.2.1</version>
+		</dependency>
+		 <dependency><!-- 该依赖必加，里面有sping对schedule的支持 -->  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-context-support</artifactId>  
+        </dependency> 
+        
 		
 	</dependencies>
 

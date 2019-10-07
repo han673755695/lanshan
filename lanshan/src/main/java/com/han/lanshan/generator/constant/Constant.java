@@ -63,7 +63,7 @@ public class Constant {
 	 */
 	public static enum templeteStringEnum{
 		prefix("${"), suffix("}"), jinghao("#{"), daolefu("$"), jing("#"),aite("@"),
-		packageName("com.han.lanshan.system"), tableNamePrefix("t_");
+		packageName("com.han.lanshan.task"), tableNamePrefix("t_");
 		private String value;
 		
 		templeteStringEnum(String value) {
