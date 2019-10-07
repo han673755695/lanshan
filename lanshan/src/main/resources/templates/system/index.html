@@ -68,93 +68,74 @@
 				   			<li>
 				   				<#if (firstMenu.url)??>
 				   					<a onclick="xadmin.add_tab('${(firstMenu.name)!}','${base}${(firstMenu.url)!}',true)">
-				                  <i class="iconfont">${(firstMenu.icon)!}</i>
-				                  <cite>${(firstMenu.name)!}</cite>
-				              </a>
-				          <#else>
-				          	<a href="javascript:;">
-				                  <i class="iconfont">${(firstMenu.icon)!}</i>
-				                  <cite>${(firstMenu.name)!}</cite>
-				                  <i class="iconfont nav_right">&#xe697;</i>
-				                 </a>
-				             	<ul class="sub-menu">
-				             		<!-- 二级菜单 -->
-				             		<#if secondMenuList?? && (secondMenuList?size>0) >
-				             			<#list secondMenuList as secondMenu>
-				             				<li>
-				              				<#if (secondMenu.url)??>
-				              					<a onclick="xadmin.add_tab('${(secondMenu.name)!}','${base}${(secondMenu.url)!}',true)">
-				                       <i class="iconfont">${(secondMenu.icon)!}</i>
-				                       <cite>${(secondMenu.name)!}</cite>
-				                   </a>
-				               <#else>
-				               	<a href="javascript:;">
-				                       <i class="iconfont">${(secondMenu.icon)!}</i>
-				                       <cite>${(secondMenu.name)!}</cite>
-				                       <i class="iconfont nav_right">&#xe697;</i>
-				                      </a>
-				                  	<ul class="sub-menu">
-				                  		<!-- 三级菜单 -->
-				                  		<#if threeMenuList?? && (threeMenuList?size>0) >
-				                  			<#list threeMenuList as threeMenu>
-				                  				<li>
-				                   				<#if (threeMenu.url)??>
-				                   					<a onclick="xadmin.add_tab('${(threeMenu.name)!}','${base}${(threeMenu.url)!}',true)">
-				                            <i class="iconfont">${(threeMenu.icon)!}</i>
-				                            <cite>${(threeMenu.name)!}</cite>
-				                        </a>
-				                    <#else>
-				                    	<a href="javascript:;">
-				                            <i class="iconfont">${(threeMenu.icon)!}</i>
-				                            <cite>${(threeMenu.name)!}</cite>
-				                            <i class="iconfont nav_right">&#xe697;</i>
-				                           </a>
-				                       	<ul class="sub-menu">
-				                       		<!-- 四级菜单 -->
-				                       		<#if fourMenuList?? && (fourMenuList?size>0) >
-				                       			<#list fourMenuList as fourMenu>
-				                       				<li>
-				                        				<#if (fourMenu.url)??>
-				                        					<a onclick="xadmin.add_tab('${(fourMenu.name)!}','${base}${(fourMenu.url)!}',true)">
-				                                 <i class="iconfont">${(fourMenu.icon)!}</i>
-				                                 <cite>${(fourMenu.name)!}</cite>
-				                             </a>
-				                         <#else>
-				                         	<a href="javascript:;">
-				                                 <i class="iconfont">${(fourMenu.icon)!}</i>
-				                                 <cite>${(fourMenu.name)!}</cite>
-				                                 <i class="iconfont nav_right">&#xe697;</i>
-				                                </a>
-				                            	<ul class="sub-menu">
-				                            		
-				                            		
-				                            		
-				                            	</ul>
-				                        				</#if>
-				                       				</li>
-				                       			</#list>
-				                       		</#if>
-				                       		
-				                       		
-				                       	</ul>
-				                   				</#if>
-				                  				</li>
-				                  			</#list>
-				                  		</#if>
-				                  		
-				                  		
-				                  	</ul>
-				              				</#if>
-				             				</li>
-				             			</#list>
-				             		</#if>
-				             		
-				                  
-				             	</ul>
+				                  		<i class="iconfont">${(firstMenu.icon)!}</i>
+				                  		<cite>${(firstMenu.name)!}</cite>
+					              	</a>
+				          		<#else>
+				          			<a href="javascript:;">
+				                  		<i class="iconfont">${(firstMenu.icon)!}</i>
+				                  		<cite>${(firstMenu.name)!}</cite>
+				                  		<i class="iconfont nav_right">&#xe697;</i>
+				                 	</a>
+				             		<ul class="sub-menu">
+				             			<!-- 二级菜单开始 -->
+				             			<#if secondMenuList?? && (secondMenuList?size>0) >
+				             				<#list secondMenuList as secondMenu>
+				             					<li>
+				              						<#if (secondMenu.url)??>
+				              							<a onclick="xadmin.add_tab('${(secondMenu.name)!}','${base}${(secondMenu.url)!}',true)">
+				                       						<i class="iconfont">${(secondMenu.icon)!}</i>
+				                       						<cite>${(secondMenu.name)!}</cite>
+				                   						</a>
+				     								<#else>
+							               				<a href="javascript:;">
+							                       			<i class="iconfont">${(secondMenu.icon)!}</i>
+							                       			<cite>${(secondMenu.name)!}</cite>
+							                       			<i class="iconfont nav_right">&#xe697;</i>
+							                    		</a>
+							                  			<ul class="sub-menu">
+							                  				<!-- 三级菜单开始 -->
+							                  				<#if threeMenuList?? && (threeMenuList?size>0) >
+							                  					<#list threeMenuList as threeMenu>
+							                  						<li>
+							                  							<#if (threeMenu.url)??>
+									              							<a onclick="xadmin.add_tab('${(threeMenu.name)!}','${base}${(threeMenu.url)!}',true)">
+									                       						<i class="iconfont">${(threeMenu.icon)!}</i>
+									                       						<cite>${(threeMenu.name)!}</cite>
+									                   						</a>
+									     								<#else>
+									     									<a href="javascript:;">
+												                       			<i class="iconfont">${(secondMenu.icon)!}</i>
+												                       			<cite>${(secondMenu.name)!}</cite>
+												                       			<i class="iconfont nav_right">&#xe697;</i>
+												                    		</a>
+												                  			<ul class="sub-menu">
+												                  				<!-- 四级菜单开始 -->
+												                  				<#if fourMenuList?? && (fourMenuList?size>0) >
+												                  					<#list fourMenuList as fourMenu>
+												                  						<li>
+												                  							<a onclick="xadmin.add_tab('${(fourMenu.name)!}','${base}${(fourMenu.url)!}',true)">
+													                       						<i class="iconfont">${(fourMenu.icon)!}</i>
+													                       						<cite>${(fourMenu.name)!}</cite>
+													                   						</a>
+												                  						</li>
+												                  					</#list>
+												                  				</#if>
+												                  			</ul>
+									     								</#if>
+							                  						</li>
+							                  					</#list>
+							                  				</#if>
+							                  				<!-- 三级菜单结束 -->
+							                  			</ul>
+				              						</#if>
+				             					</li>
+				             				</#list>
+				             			</#if>
+				             			<!-- 二级菜单结束 -->
+				             		</ul>
 				   				</#if>
-				            	
-				         </li>
-				         
+				         	</li>
 				   		</#list>
 				   	</#if>
                 	

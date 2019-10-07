@@ -4,13 +4,14 @@ import java.util.Map;
 
 /**
  * 返回的数据结构
+ * 
  * @author my
  *
  */
 public class ReturnData {
 
 	public static final String DATAKEY = "returndata";
-	
+
 	public static String SUCCESS = "success";
 	public static String ERROR = "error";
 
@@ -51,12 +52,12 @@ public class ReturnData {
 		this.message = message;
 	}
 
-	public Map<String, Object> getMapData() {
+	public Map<String, Object> getMap() {
 		return map;
 	}
 
-	public void setMapData(Map<String, Object> mapData) {
-		this.map = mapData;
+	public void setMap(Map<String, Object> map) {
+		this.map = map;
 	}
 
 	public Object getData() {
@@ -103,8 +104,8 @@ public class ReturnData {
 
 	@Override
 	public String toString() {
-		return "ResultData [mapData=" + map + ", data=" + data + ", status=" + status + ", page=" + page
-				+ ", message=" + message + "]";
+		return "ResultData [mapData=" + map + ", data=" + data + ", status=" + status + ", page=" + page + ", message="
+				+ message + "]";
 	}
 
 }

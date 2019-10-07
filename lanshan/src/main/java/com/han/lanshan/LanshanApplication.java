@@ -12,6 +12,7 @@ public class LanshanApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LanshanApplication.class, args);
+		System.out.println("启动完毕...");
 	}
 
 }

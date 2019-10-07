@@ -256,7 +256,6 @@
 		
 		function onCheck(e, treeId, treeNode) {
 			
-			console.log("ids: " + treeNode);
 		}
 
 		var listZNodes =[
@@ -292,9 +291,14 @@
 	    
 	    function addDiyDom(treeId, treeNode) {
 			if (treeNode.level != 0){
-				var aObj = $("#" + treeNode.tId);
 				var editStr = '<i class="layui-icon" id="diyBtn_' + treeNode.id + '" onclick="deleteMenu(\'' + treeNode.id + '\')">&#xe640;</i>';
-				aObj.append(editStr);
+				var aObj = $("#" + treeNode.tId);
+				var childrenUl = $(aObj).children("ul");
+				if(childrenUl.length > 0){
+					$(childrenUl).before(editStr);
+				}else{
+					aObj.append(editStr);
+				}
 			}
 		}
 	    

@@ -60,6 +60,7 @@ public class MenuController extends BaseController {
 		
 		try {
 			Page page = Page.getPage(request);
+			menu.setActive(SystemEnum.ActiveEnum.可用.getValue());
 			List<Menu> datas = menuService.findMenuList(menu, null);
 			int totalCount = menuService.findMenuCount(menu, null);
 			page.setTotalCount(totalCount);
