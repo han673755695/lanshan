@@ -59,6 +59,15 @@ public class ShiroConfig {
 		// 静态资源
 		map.put("/system/**", "anon");
 		
+		map.put("/swagger-ui.html", "anon");
+		map.put("/webjars/**", "anon");
+		map.put("/v2/**", "anon");
+		map.put("/swagger-resources/**", "anon");
+		map.put("/configuration/**", "anon");
+		
+		map.put("/doc.html", "anon");
+		map.put("/api-docs-ext/**", "anon");
+		map.put("/api-docs/**", "anon");
 		
 		// 登陆接口
 		map.put("/s/system/login/login", "anon");
@@ -71,6 +80,7 @@ public class ShiroConfig {
 
 		map.put("/unauthorized", "anon");
 		map.put("/s/job/runJob", "anon");
+		map.put("/test/weixin/**", "anon");
 		// 自定义的拦截器 拦截
 		map.put("/s/**", "systemPermissions");
 		

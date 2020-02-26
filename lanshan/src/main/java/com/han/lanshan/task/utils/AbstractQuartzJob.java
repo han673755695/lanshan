@@ -63,7 +63,17 @@ public abstract class AbstractQuartzJob implements org.quartz.Job {
 		jobLog.setJobName(job.getJobName());
 		jobLog.setJobGroup(job.getJobGroup());
 		jobLog.setInvokeTarget(job.getInvokeTarget());
+		jobLog.setCreateTime(new Date());
+		long runMs = startTime.getTime() - new Date().getTime();
+		jobLog.setJobMessage(jobLog.getJobName() + " 总共耗时：" + runMs + "毫秒");
 
+		if (e != null){
+            jobLog.setActive("1");
+            String errorMsg = e.getMessage().substring(0, 2000);
+            jobLog.setExceptionInfo(errorMsg);
+        }else{
+        	jobLog.setActive("0");
+        }
 	}
 
 	/**

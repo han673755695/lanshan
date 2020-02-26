@@ -26,12 +26,7 @@
 							<form id="searchForm" action="${base}/s/jobLog/list" class="layui-form layui-col-space5">
 								<input type="hidden" name="currentPage" value="${(returnDatas.page.pageNum)!}"/>
 								<input type="hidden" name="pageSize" value="${(returnDatas.page.pageSize)!}"/>
-								<div class="layui-inline">
-									<span>日期:</span>
-								</div>
-								<div class="layui-inline">
-									<input class="layui-input" autocomplete="off" placeholder="开始日" name="start" value="${(returnDatas.queryParams.start)!''}" id="start">
-								</div>
+								
 								<div class="layui-inline">
 									<span>姓名:</span>
 								</div>
@@ -44,12 +39,7 @@
 							</form>
 						</div>
 						<div class="layui-card-header">
-							<@shiro.hasPermission name="/s/jobLog/delete" >
-								<button type="button" class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-							</@shiro.hasPermission>
-							<@shiro.hasPermission name="/s/jobLog/update" >
-								<button type="button" class="layui-btn" onclick="xadmin.open('添加','${base}/s/jobLog/update/pre',600,400)"><i class="layui-icon"></i>添加</button>
-							</@shiro.hasPermission>
+							
 							<@shiro.hasPermission name="/s/jobLog/list/export" >
 								<button type="button" class="layui-btn layui-btn-warm" onclick="exportExcel()"><i class="layui-icon">&#xe601;</i>导出</button>
 							</@shiro.hasPermission>
@@ -92,16 +82,6 @@
 													<@shiro.hasPermission name="/s/jobLog/look" >
 														<a title="查看" onclick="xadmin.open('查看','${base}/s/jobLog/look?id=${jobLog.id}',600,400)" href="javascript:;">
 															<i class="layui-icon">&#xe63c;</i>
-														</a>
-													</@shiro.hasPermission>
-													<@shiro.hasPermission name="/s/jobLog/update" >
-														<a title="编辑" onclick="xadmin.open('编辑','${base}/s/jobLog/update/pre?id=${jobLog.id}',600,400)" href="javascript:;">
-															<i class="layui-icon">&#xe642;</i>
-														</a>
-													</@shiro.hasPermission>
-													<@shiro.hasPermission name="/s/jobLog/delete" >
-														<a title="删除" onclick="member_del(this,'${jobLog.id}')" href="javascript:;">
-															<i class="layui-icon">&#xe640;</i>
 														</a>
 													</@shiro.hasPermission>
 												</td>

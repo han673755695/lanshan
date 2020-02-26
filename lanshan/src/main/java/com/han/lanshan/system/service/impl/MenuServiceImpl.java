@@ -53,11 +53,14 @@ public class MenuServiceImpl extends BaseServiceImpl implements IMenuService {
 				String uuid = UUIDUtils.getUUID();
 				menu.setId(uuid);
 				if (StringUtils.isEmpty(menu.getParentId())) {
-					menu.setParentId("-1");
+					menu.setParentId("4916c5eaa6854edfa676c63e2b4d425b");
+					menu.setLevel("1");
+				}else {
+					Menu parentMenu = menuDao.findMenuById(menu.getParentId());
+					String level = parentMenu.getLevel();
+					menu.setLevel(Integer.parseInt(level) + 1 + "");
 				}
-				Menu parentMenu = menuDao.findMenuById(menu.getParentId());
-				String level = parentMenu.getLevel();
-				menu.setLevel(Integer.parseInt(level) + 1 + "");
+				
 				menu.setCreateDate(new Date());
 				menu.setUpdateDate(new Date());
 				menu.setActive(SystemEnum.ActiveEnum.可用.getValue());
