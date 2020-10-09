@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.han.lanshan.task.dao.JobMapper">
+	<!-- 数据库字段映射 -->
+	<resultMap id="BaseResultMap"
+		type="com.han.lanshan.task.entry.Job">
+		
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="job_name" property="jobName" />
+		<result column="job_group" property="jobGroup" />
+		<result column="invoke_target" property="invokeTarget" />
+		<result column="cron_expression" property="cronExpression" />
+		<result column="misfire_policy" property="misfirePolicy" />
+		<result column="concurrent" property="concurrent" />
+		<result column="active" property="active" />
+		<result column="create_by" property="createBy" />
+		<result column="create_time" property="createTime" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_time" property="updateTime" />
+		<result column="remark" property="remark" />
+	    
+	</resultMap>
+	
+	
+	<!-- 基础的数据库字段 -->
+	<sql id="Base_Column_List">
+		id,
+		job_name,
+		job_group,
+		invoke_target,
+		cron_expression,
+		misfire_policy,
+		concurrent,
+		active,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		remark
+	</sql>
+	
+	
+	<!-- 根据主键获取信息 -->
+	<select id="findJobById" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from quartz_job
+		where id = #{id}
+	</select>
+	
+	
+	<!-- 根据实体类获取集合 -->
+	<select id="findJobList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from quartz_job
+		where 1=1
+		<if test="job.id != null and job.id != '' ">
+				and id = #{job.id}
+		</if>
+		<if test="job.jobName != null and job.jobName != '' ">
+				and job_name = #{job.jobName}
+		</if>
+		<if test="job.jobGroup != null and job.jobGroup != '' ">
+				and job_group = #{job.jobGroup}
+		</if>
+		<if test="job.invokeTarget != null and job.invokeTarget != '' ">
+				and invoke_target = #{job.invokeTarget}
+		</if>
+		<if test="job.cronExpression != null and job.cronExpression != '' ">
+				and cron_expression = #{job.cronExpression}
+		</if>
+		<if test="job.misfirePolicy != null and job.misfirePolicy != '' ">
+				and misfire_policy = #{job.misfirePolicy}
+		</if>
+		<if test="job.concurrent != null and job.concurrent != '' ">
+				and concurrent = #{job.concurrent}
+		</if>
+		<if test="job.active != null and job.active != '' ">
+				and active = #{job.active}
+		</if>
+		<if test="job.createBy != null and job.createBy != '' ">
+				and create_by = #{job.createBy}
+		</if>
+		<if test="job.createTime != null and job.createTime != '' ">
+				and DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(#{job.createTime},'%Y-%m-%d')
+		</if>
+		<if test="job.updateBy != null and job.updateBy != '' ">
+				and update_by = #{job.updateBy}
+		</if>
+		<if test="job.updateTime != null and job.updateTime != '' ">
+				and DATE_FORMAT(update_time,'%Y-%m-%d') = DATE_FORMAT(#{job.updateTime},'%Y-%m-%d')
+		</if>
+		<if test="job.remark != null and job.remark != '' ">
+				and remark = #{job.remark}
+		</if>
+		ORDER BY id
+		<if test="page != null and page.current != null and page.pageSize != null ">
+			limit #{page.current},#{page.pageSize}
+		</if>
+	</select>
+	
+	
+	<!-- 根据实体类获取Count数量 -->
+	<select id="findJobCount" resultType="int">
+		select
+		count(id) totalCount
+		from quartz_job
+		where 1=1
+		<if test="job.id != null and job.id != '' ">
+				and id = #{job.id}
+		</if>
+		<if test="job.jobName != null and job.jobName != '' ">
+				and job_name = #{job.jobName}
+		</if>
+		<if test="job.jobGroup != null and job.jobGroup != '' ">
+				and job_group = #{job.jobGroup}
+		</if>
+		<if test="job.invokeTarget != null and job.invokeTarget != '' ">
+				and invoke_target = #{job.invokeTarget}
+		</if>
+		<if test="job.cronExpression != null and job.cronExpression != '' ">
+				and cron_expression = #{job.cronExpression}
+		</if>
+		<if test="job.misfirePolicy != null and job.misfirePolicy != '' ">
+				and misfire_policy = #{job.misfirePolicy}
+		</if>
+		<if test="job.concurrent != null and job.concurrent != '' ">
+				and concurrent = #{job.concurrent}
+		</if>
+		<if test="job.active != null and job.active != '' ">
+				and active = #{job.active}
+		</if>
+		<if test="job.createBy != null and job.createBy != '' ">
+				and create_by = #{job.createBy}
+		</if>
+		<if test="job.createTime != null and job.createTime != '' ">
+				and DATE_FORMAT(create_time,'%Y-%m-%d') = DATE_FORMAT(#{job.createTime},'%Y-%m-%d')
+		</if>
+		<if test="job.updateBy != null and job.updateBy != '' ">
+				and update_by = #{job.updateBy}
+		</if>
+		<if test="job.updateTime != null and job.updateTime != '' ">
+				and DATE_FORMAT(update_time,'%Y-%m-%d') = DATE_FORMAT(#{job.updateTime},'%Y-%m-%d')
+		</if>
+		<if test="job.remark != null and job.remark != '' ">
+				and remark = #{job.remark}
+		</if>
+	</select>
+	
+	
+	<!-- 根据id删除数据 -->
+	<update id="deleteJob">
+		delete from quartz_job
+		where id in 
+		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+	
+	
+	<!-- 动态添加数据 -->
+	<insert id="saveJob"
+		parameterType="com.han.lanshan.task.entry.Job">
+		insert into quartz_job
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		
+					<if test="id != null">
+						id,
+					</if>
+					<if test="jobName != null">
+						job_name,
+					</if>
+					<if test="jobGroup != null">
+						job_group,
+					</if>
+					<if test="invokeTarget != null">
+						invoke_target,
+					</if>
+					<if test="cronExpression != null">
+						cron_expression,
+					</if>
+					<if test="misfirePolicy != null">
+						misfire_policy,
+					</if>
+					<if test="concurrent != null">
+						concurrent,
+					</if>
+					<if test="active != null">
+						active,
+					</if>
+					<if test="createBy != null">
+						create_by,
+					</if>
+					<if test="createTime != null">
+						create_time,
+					</if>
+					<if test="updateBy != null">
+						update_by,
+					</if>
+					<if test="updateTime != null">
+						update_time,
+					</if>
+					<if test="remark != null">
+						remark,
+					</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+					<if test="id != null">
+						#{id},
+					</if>
+					<if test="jobName != null">
+						#{jobName},
+					</if>
+					<if test="jobGroup != null">
+						#{jobGroup},
+					</if>
+					<if test="invokeTarget != null">
+						#{invokeTarget},
+					</if>
+					<if test="cronExpression != null">
+						#{cronExpression},
+					</if>
+					<if test="misfirePolicy != null">
+						#{misfirePolicy},
+					</if>
+					<if test="concurrent != null">
+						#{concurrent},
+					</if>
+					<if test="active != null">
+						#{active},
+					</if>
+					<if test="createBy != null">
+						#{createBy},
+					</if>
+					<if test="createTime != null">
+						#{createTime},
+					</if>
+					<if test="updateBy != null">
+						#{updateBy},
+					</if>
+					<if test="updateTime != null">
+						#{updateTime},
+					</if>
+					<if test="remark != null">
+						#{remark},
+					</if>
+		</trim>
+	</insert>
+	
+	<!-- 动态修改数据 -->
+	<update id="updateActiveJob" parameterType="map">
+		update quartz_job
+		<set>
+						<if test="jobName != null">
+							job_name = #{jobName},
+						</if>
+						<if test="jobGroup != null">
+							job_group = #{jobGroup},
+						</if>
+						<if test="invokeTarget != null">
+							invoke_target = #{invokeTarget},
+						</if>
+						<if test="cronExpression != null">
+							cron_expression = #{cronExpression},
+						</if>
+						<if test="misfirePolicy != null">
+							misfire_policy = #{misfirePolicy},
+						</if>
+						<if test="concurrent != null">
+							concurrent = #{concurrent},
+						</if>
+						<if test="active != null">
+							active = #{active},
+						</if>
+						<if test="createBy != null">
+							create_by = #{createBy},
+						</if>
+						<if test="createTime != null">
+							create_time = #{createTime},
+						</if>
+						<if test="updateBy != null">
+							update_by = #{updateBy},
+						</if>
+						<if test="updateTime != null">
+							update_time = #{updateTime},
+						</if>
+						<if test="remark != null">
+							remark = #{remark},
+						</if>
+		</set>
+		WHERE
+		id=#{id,jdbcType=VARCHAR}
+		
+	</update>
+	
+	<!-- 修改数据 -->
+	<update id="updateJob" parameterType="map">
+		update quartz_job
+		set 
+					job_name = #{jobName},
+					job_group = #{jobGroup},
+					invoke_target = #{invokeTarget},
+					cron_expression = #{cronExpression},
+					misfire_policy = #{misfirePolicy},
+					concurrent = #{concurrent},
+					active = #{active},
+					create_by = #{createBy},
+					create_time = #{createTime},
+					update_by = #{updateBy},
+					update_time = #{updateTime},
+					remark = #{remark}
+		WHERE
+		id=#{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+	<meta charset="UTF-8">
+	<#include "../common/head.html"/>
+	<@aHead title="后台登录-X-admin2.2" />
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row">
+				<form class="layui-form">
+				
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>角色名称</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${(returnDatas.data.roleName)!''}" id="roleName" name="roleName" required="" lay-verify="*" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>描述</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${(returnDatas.data.bewrite)!''}" id="bewrite" name="bewrite" required="" lay-verify="*" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>创建时间</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${((returnDatas.data.createDate)?string('yyyy-MM-dd HH:ss:mm'))!''}" id="createDate" name="createDate" required="" lay-verify="*" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>修改时间</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${((returnDatas.data.updateDate)?string('yyyy-MM-dd HH:ss:mm'))!''}" id="updateDate" name="updateDate" required="" lay-verify="*" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>是否可用</label>
+						<div class="layui-input-inline">
+							<select name="active" class="layui-input-inline" value="${(returnDatas.data.active)!''}" id="active" name="active" required="" lay-verify="*" search>
+	                            <option value="1">可用</option>
+	                            <option value="2">不可用</option>
+	                        </select>
+						</div>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+		<script>
+			layui.use(['form', 'layer', 'jquery'],
+				function() {
+					var form = layui.form,
+						layer = layui.layer;
+
+					$("input").attr("readonly","readonly")
+
+				});
+		</script>
+	</body>
+
+</html>

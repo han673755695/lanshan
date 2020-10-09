@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.han.lanshan.system.dao.DicDataMapper">
+	<!-- 数据库字段映射 -->
+	<resultMap id="BaseResultMap"
+		type="com.han.lanshan.system.entry.DicData">
+		
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" />
+		<result column="code" property="code" />
+		<result column="sort" property="sort" />
+		<result column="remark" property="remark" />
+		<result column="active" property="active" />
+		<result column="typekey" property="typekey" />
+		<result column="bak1" property="bak1" />
+		<result column="bak2" property="bak2" />
+		<result column="bak3" property="bak3" />
+	    
+	</resultMap>
+	
+	
+	<!-- 基础的数据库字段 -->
+	<sql id="Base_Column_List">
+		id,
+		name,
+		code,
+		sort,
+		remark,
+		active,
+		typekey,
+		bak1,
+		bak2,
+		bak3
+	</sql>
+	
+	
+	<!-- 根据主键获取信息 -->
+	<select id="findDicDataById" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_dic_data
+		where id = #{id}
+	</select>
+	
+	
+	<!-- 根据实体类获取集合 -->
+	<select id="findDicDataList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_dic_data
+		where 1=1
+		<if test="dicData.id != null and dicData.id != '' ">
+				and id = #{dicData.id}
+		</if>
+		<if test="dicData.name != null and dicData.name != '' ">
+				and name = #{dicData.name}
+		</if>
+		<if test="dicData.code != null and dicData.code != '' ">
+				and code = #{dicData.code}
+		</if>
+		<if test="dicData.sort != null and dicData.sort != '' ">
+				and sort = #{dicData.sort}
+		</if>
+		<if test="dicData.remark != null and dicData.remark != '' ">
+				and remark = #{dicData.remark}
+		</if>
+		<if test="dicData.active != null and dicData.active != '' ">
+				and active = #{dicData.active}
+		</if>
+		<if test="dicData.typekey != null and dicData.typekey != '' ">
+				and typekey = #{dicData.typekey}
+		</if>
+		<if test="dicData.bak1 != null and dicData.bak1 != '' ">
+				and bak1 = #{dicData.bak1}
+		</if>
+		<if test="dicData.bak2 != null and dicData.bak2 != '' ">
+				and bak2 = #{dicData.bak2}
+		</if>
+		<if test="dicData.bak3 != null and dicData.bak3 != '' ">
+				and bak3 = #{dicData.bak3}
+		</if>
+		ORDER BY id
+		<if test="page != null and page.current != null and page.pageSize != null ">
+			limit #{page.current},#{page.pageSize}
+		</if>
+	</select>
+	
+	
+	<!-- 根据实体类获取Count数量 -->
+	<select id="findDicDataCount" resultType="int">
+		select
+		count(id) totalCount
+		from t_dic_data
+		where 1=1
+		<if test="dicData.id != null and dicData.id != '' ">
+				and id = #{dicData.id}
+		</if>
+		<if test="dicData.name != null and dicData.name != '' ">
+				and name = #{dicData.name}
+		</if>
+		<if test="dicData.code != null and dicData.code != '' ">
+				and code = #{dicData.code}
+		</if>
+		<if test="dicData.sort != null and dicData.sort != '' ">
+				and sort = #{dicData.sort}
+		</if>
+		<if test="dicData.remark != null and dicData.remark != '' ">
+				and remark = #{dicData.remark}
+		</if>
+		<if test="dicData.active != null and dicData.active != '' ">
+				and active = #{dicData.active}
+		</if>
+		<if test="dicData.typekey != null and dicData.typekey != '' ">
+				and typekey = #{dicData.typekey}
+		</if>
+		<if test="dicData.bak1 != null and dicData.bak1 != '' ">
+				and bak1 = #{dicData.bak1}
+		</if>
+		<if test="dicData.bak2 != null and dicData.bak2 != '' ">
+				and bak2 = #{dicData.bak2}
+		</if>
+		<if test="dicData.bak3 != null and dicData.bak3 != '' ">
+				and bak3 = #{dicData.bak3}
+		</if>
+	</select>
+	
+	
+	<!-- 根据id删除数据 -->
+	<update id="deleteDicData">
+		update t_dic_data set active=2
+		where id in 
+		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+	
+	
+	<!-- 动态添加数据 -->
+	<insert id="saveDicData"
+		parameterType="com.han.lanshan.system.entry.DicData">
+		insert into t_dic_data
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		
+					<if test="id != null">
+						id,
+					</if>
+					<if test="name != null">
+						name,
+					</if>
+					<if test="code != null">
+						code,
+					</if>
+					<if test="sort != null">
+						sort,
+					</if>
+					<if test="remark != null">
+						remark,
+					</if>
+					<if test="active != null">
+						active,
+					</if>
+					<if test="typekey != null">
+						typekey,
+					</if>
+					<if test="bak1 != null">
+						bak1,
+					</if>
+					<if test="bak2 != null">
+						bak2,
+					</if>
+					<if test="bak3 != null">
+						bak3,
+					</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+					<if test="id != null">
+						#{id},
+					</if>
+					<if test="name != null">
+						#{name},
+					</if>
+					<if test="code != null">
+						#{code},
+					</if>
+					<if test="sort != null">
+						#{sort},
+					</if>
+					<if test="remark != null">
+						#{remark},
+					</if>
+					<if test="active != null">
+						#{active},
+					</if>
+					<if test="typekey != null">
+						#{typekey},
+					</if>
+					<if test="bak1 != null">
+						#{bak1},
+					</if>
+					<if test="bak2 != null">
+						#{bak2},
+					</if>
+					<if test="bak3 != null">
+						#{bak3},
+					</if>
+		</trim>
+	</insert>
+	
+	<!-- 动态修改数据 -->
+	<update id="updateActiveDicData" parameterType="map">
+		update t_dic_data
+		<set>
+						<if test="name != null">
+							name = #{name},
+						</if>
+						<if test="code != null">
+							code = #{code},
+						</if>
+						<if test="sort != null">
+							sort = #{sort},
+						</if>
+						<if test="remark != null">
+							remark = #{remark},
+						</if>
+						<if test="active != null">
+							active = #{active},
+						</if>
+						<if test="typekey != null">
+							typekey = #{typekey},
+						</if>
+						<if test="bak1 != null">
+							bak1 = #{bak1},
+						</if>
+						<if test="bak2 != null">
+							bak2 = #{bak2},
+						</if>
+						<if test="bak3 != null">
+							bak3 = #{bak3},
+						</if>
+		</set>
+		WHERE
+		id=#{id,jdbcType=VARCHAR}
+		
+	</update>
+	
+	<!-- 修改数据 -->
+	<update id="updateDicData" parameterType="map">
+		update t_dic_data
+		set 
+					name = #{name},
+					code = #{code},
+					sort = #{sort},
+					remark = #{remark},
+					active = #{active},
+					typekey = #{typekey},
+					bak1 = #{bak1},
+					bak2 = #{bak2},
+					bak3 = #{bak3}
+		WHERE
+		id=#{id}
+	</update>
+	
+</mapper>

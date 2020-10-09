@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+	<meta charset="UTF-8">
+	<#include "../common/head.html"/>
+	<@aHead title="后台登录-X-admin2.2" />
+
+	<body>
+		<div class="layui-fluid">
+			<div class="layui-row">
+				<form class="layui-form">
+					<input type="hidden" value="${(returnDatas.data.id)!''}" id="id" name="id" class="layui-input">
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>部门名称</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${(returnDatas.data.orgName)!''}" id="orgName" name="orgName" required="" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>描述</label>
+						<div class="layui-input-inline">
+							<input type="text" value="${(returnDatas.data.describe)!''}" id="describe" name="describe" required="" lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label"><span class="x-red">*</span>是否可用</label>
+						<div class="layui-input-inline">
+							<select class="layui-input-inline" value="${(returnDatas.data.active)!''}" id="active" name="active" required="" lay-verify="required" lay-search>
+	                            <option value="">请选择</option>
+	                            <option value="1">可用</option>
+	                            <option value="2">不可用</option>
+	                        </select>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label for="L_repass" class="layui-form-label"></label>
+						<button class="layui-btn" lay-filter="add" lay-submit="">增加</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script>
+			layui.use(['form', 'layer', 'jquery'],function() {
+				var form = layui.form,
+					layer = layui.layer;
+				//自定义验证规则
+				form.verify({
+					nikename: function(value) {
+						if(value.length < 2) {
+							return '昵称至少得2个字符啊';
+						}
+					},
+					
+				});
+	
+				//监听提交
+				form.on('submit(add)',function(data) {
+						
+					xadmin.ajaxPost("${base}/s/org/update",null,data.field,null,function(){
+						//关闭当前frame
+						xadmin.close();
+						// 可以对父窗口进行刷新 
+						xadmin.father_reload();
+					});
+				
+					return false;
+				});
+				
+				
+				var active = "${(returnDatas.data.active)!''}";
+				if(!isNull(active)){
+					$("#active").val(active)
+				}
+				
+				form.render();
+	
+			});
+		</script>
+	</body>
+
+</html>

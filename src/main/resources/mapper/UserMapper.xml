@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.han.lanshan.system.dao.UserMapper">
+	<!-- 数据库字段映射 -->
+	<resultMap id="BaseResultMap"
+		type="com.han.lanshan.system.entry.User">
+		
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" />
+		<result column="age" property="age" />
+		<result column="password" property="password" />
+		<result column="email" property="email" />
+		<result column="create_date" property="createDate" />
+		<result column="update_date" property="updateDate" />
+		<result column="hobby" property="hobby" />
+		<result column="status" property="status" />
+		<result column="account" property="account" />
+		<result column="userType" property="userType" />
+		<result column="sex" property="sex" />
+		<result column="bak1" property="bak1" />
+		<result column="bak2" property="bak2" />
+		<result column="bak3" property="bak3" />
+	    
+	</resultMap>
+	
+	
+	<!-- 基础的数据库字段 -->
+	<sql id="Base_Column_List">
+		id,
+		name,
+		age,
+		password,
+		email,
+		create_date,
+		update_date,
+		hobby,
+		status,
+		account,
+		userType,
+		sex,
+		bak1,
+		bak2,
+		bak3
+	</sql>
+	
+	
+	<!-- 根据主键获取信息 -->
+	<select id="findUserById" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		where id = #{id}
+	</select>
+	
+	
+	<!-- 根据实体类获取集合 -->
+	<select id="findUserList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		where 1=1
+		<if test="user.id != null and user.id != '' ">
+				and id = #{user.id}
+		</if>
+		<if test="user.name != null and user.name != '' ">
+				and name = like CONCAT('%',#{user.name},'%')
+		</if>
+		<if test="user.age != null and user.age != '' ">
+				and age = #{user.age}
+		</if>
+		<if test="user.password != null and user.password != '' ">
+				and password = #{user.password}
+		</if>
+		<if test="user.email != null and user.email != '' ">
+				and email = #{user.email}
+		</if>
+		<if test="user.createDate != null and user.createDate != '' ">
+				and DATE_FORMAT(create_date,'%Y-%m-%d') = DATE_FORMAT(#{user.createDate},'%Y-%m-%d')
+		</if>
+		<if test="user.updateDate != null and user.updateDate != '' ">
+				and DATE_FORMAT(update_date,'%Y-%m-%d') = DATE_FORMAT(#{user.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="user.hobby != null and user.hobby != '' ">
+				and hobby = #{user.hobby}
+		</if>
+		<if test="user.status != null and user.status != '' ">
+				and status = #{user.status}
+		</if>
+		<if test="user.account != null and user.account != '' ">
+				and account = #{user.account}
+		</if>
+		<if test="user.userType != null and user.userType != '' ">
+				and userType = #{user.userType}
+		</if>
+		<if test="user.sex != null and user.sex != '' ">
+				and sex = #{user.sex}
+		</if>
+		<if test="user.bak1 != null and user.bak1 != '' ">
+				and bak1 = #{user.bak1}
+		</if>
+		<if test="user.bak2 != null and user.bak2 != '' ">
+				and bak2 = #{user.bak2}
+		</if>
+		<if test="user.bak3 != null and user.bak3 != '' ">
+				and bak3 = #{user.bak3}
+		</if>
+		ORDER BY id
+		<if test="page != null and page.current != null and page.pageSize != null ">
+			limit #{page.current},#{page.pageSize}
+		</if>
+	</select>
+	
+	
+	<!-- 根据实体类获取Count数量 -->
+	<select id="findUserCount" resultType="int">
+		select
+		count(id) totalCount
+		from t_user
+		where 1=1
+		<if test="user.id != null and user.id != '' ">
+				and id = #{user.id}
+		</if>
+		<if test="user.name != null and user.name != '' ">
+				and name = #{user.name}
+		</if>
+		<if test="user.age != null and user.age != '' ">
+				and age = #{user.age}
+		</if>
+		<if test="user.password != null and user.password != '' ">
+				and password = #{user.password}
+		</if>
+		<if test="user.email != null and user.email != '' ">
+				and email = #{user.email}
+		</if>
+		<if test="user.createDate != null and user.createDate != '' ">
+				and DATE_FORMAT(create_date,'%Y-%m-%d') = DATE_FORMAT(#{user.createDate},'%Y-%m-%d')
+		</if>
+		<if test="user.updateDate != null and user.updateDate != '' ">
+				and DATE_FORMAT(update_date,'%Y-%m-%d') = DATE_FORMAT(#{user.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="user.hobby != null and user.hobby != '' ">
+				and hobby = #{user.hobby}
+		</if>
+		<if test="user.status != null and user.status != '' ">
+				and status = #{user.status}
+		</if>
+		<if test="user.account != null and user.account != '' ">
+				and account = #{user.account}
+		</if>
+		<if test="user.userType != null and user.userType != '' ">
+				and userType = #{user.userType}
+		</if>
+		<if test="user.sex != null and user.sex != '' ">
+				and sex = #{user.sex}
+		</if>
+		<if test="user.bak1 != null and user.bak1 != '' ">
+				and bak1 = #{user.bak1}
+		</if>
+		<if test="user.bak2 != null and user.bak2 != '' ">
+				and bak2 = #{user.bak2}
+		</if>
+		<if test="user.bak3 != null and user.bak3 != '' ">
+				and bak3 = #{user.bak3}
+		</if>
+	</select>
+	
+	
+	<!-- 根据id删除数据 -->
+	<update id="deleteUser">
+		update t_user set status=2
+		where id in 
+		<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+	
+	
+	<!-- 动态添加数据 -->
+	<insert id="saveUser"
+		parameterType="com.han.lanshan.system.entry.User">
+		insert into t_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="age != null">
+				age,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+			<if test="updateDate != null">
+				update_date,
+			</if>
+			<if test="hobby != null">
+				hobby,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="account != null">
+				account,
+			</if>
+			<if test="userType != null">
+				userType,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="bak1 != null">
+				bak1,
+			</if>
+			<if test="bak2 != null">
+				bak2,
+			</if>
+			<if test="bak3 != null">
+				bak3,
+			</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="age != null">
+				#{age},
+			</if>
+			<if test="password != null">
+				#{password},
+			</if>
+			<if test="email != null">
+				#{email},
+			</if>
+			<if test="createDate != null">
+				#{createDate},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate},
+			</if>
+			<if test="hobby != null">
+				#{hobby},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="account != null">
+				#{account},
+			</if>
+			<if test="userType != null">
+				#{userType},
+			</if>
+			<if test="sex != null">
+				#{sex},
+			</if>
+			<if test="bak1 != null">
+				#{bak1},
+			</if>
+			<if test="bak2 != null">
+				#{bak2},
+			</if>
+			<if test="bak3 != null">
+				#{bak3},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 动态修改数据 -->
+	<update id="updateActiveUser" parameterType="map">
+		update t_user
+		<set>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="age != null">
+				age = #{age},
+			</if>
+			<if test="password != null">
+				password = #{password},
+			</if>
+			<if test="email != null">
+				email = #{email},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+			<if test="hobby != null">
+				hobby = #{hobby},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="account != null">
+				account = #{account},
+			</if>
+			<if test="userType != null">
+				userType = #{userType},
+			</if>
+			<if test="sex != null">
+				sex = #{sex},
+			</if>
+			<if test="bak1 != null">
+				bak1 = #{bak1},
+			</if>
+			<if test="bak2 != null">
+				bak2 = #{bak2},
+			</if>
+			<if test="bak3 != null">
+				bak3 = #{bak3},
+			</if>
+		</set>
+		WHERE
+		id=#{id,jdbcType=VARCHAR}
+		
+	</update>
+	
+	<!-- 修改数据 -->
+	<update id="updateUser" parameterType="map">
+		update t_user
+		set 
+			name = #{name},
+			age = #{age},
+			password = #{password},
+			email = #{email},
+			create_date = #{createDate},
+			update_date = #{updateDate},
+			hobby = #{hobby},
+			status = #{status},
+			account = #{account},
+			userType = #{userType},
+			sex = #{sex},
+			bak1 = #{bak1},
+			bak2 = #{bak2},
+			bak3 = #{bak3},
+		WHERE
+		id=#{id}
+	</update>
+	
+	<!-- 根据用户账号和密码 -->
+	<select id="selectUserByNameAndPwd" resultMap="BaseResultMap"
+		parameterType="Map">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		where 1=1
+		<if test="username != null and username != '' ">
+			and name=#{username}
+		</if>
+		<if test="password != null and password != '' ">
+			and password=#{password}
+		</if>
+	</select>
+	
+</mapper>

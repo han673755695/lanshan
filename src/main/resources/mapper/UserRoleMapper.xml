@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.han.lanshan.system.dao.UserRoleMapper">
+	<!-- 数据库字段映射 -->
+	<resultMap id="BaseResultMap"
+		type="com.han.lanshan.system.entry.UserRole">
+		
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="userId" property="userId" />
+		<result column="roleId" property="roleId" />
+		<result column="createUser" property="createUser" />
+		<result column="createDate" property="createDate" />
+		<result column="updateUser" property="updateUser" />
+		<result column="updateDate" property="updateDate" />
+		<result column="active" property="active" />
+	    
+	</resultMap>
+	
+	
+	<!-- 基础的数据库字段 -->
+	<sql id="Base_Column_List">
+		id,
+		userId,
+		roleId,
+		createUser,
+		createDate,
+		updateUser,
+		updateDate,
+		active
+	</sql>
+	
+	
+	<!-- 根据主键获取信息 -->
+	<select id="findUserRoleById" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_role
+		where id = #{id}
+	</select>
+	
+	
+	<!-- 根据实体类获取集合 -->
+	<select id="findUserRoleList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_role
+		where 1=1
+		<if test="userRole.id != null and userRole.id != '' ">
+				and id = #{userRole.id}
+		</if>
+		<if test="userRole.userId != null and userRole.userId != '' ">
+				and userId = #{userRole.userId}
+		</if>
+		<if test="userRole.roleId != null and userRole.roleId != '' ">
+				and roleId = #{userRole.roleId}
+		</if>
+		<if test="userRole.createUser != null and userRole.createUser != '' ">
+				and createUser = #{userRole.createUser}
+		</if>
+		<if test="userRole.createDate != null and userRole.createDate != '' ">
+				and DATE_FORMAT(createDate,'%Y-%m-%d') = DATE_FORMAT(#{userRole.createDate},'%Y-%m-%d')
+		</if>
+		<if test="userRole.updateUser != null and userRole.updateUser != '' ">
+				and updateUser = #{userRole.updateUser}
+		</if>
+		<if test="userRole.updateDate != null and userRole.updateDate != '' ">
+				and DATE_FORMAT(updateDate,'%Y-%m-%d') = DATE_FORMAT(#{userRole.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="userRole.active != null and userRole.active != '' ">
+				and active = #{userRole.active}
+		</if>
+		ORDER BY id
+		<if test="page != null and page.current != null and page.pageSize != null ">
+			limit #{page.current},#{page.pageSize}
+		</if>
+	</select>
+	
+	
+	<!-- 根据实体类获取Count数量 -->
+	<select id="findUserRoleCount" resultType="int">
+		select
+		count(id) totalCount
+		from t_user_role
+		where 1=1
+		<if test="userRole.id != null and userRole.id != '' ">
+				and id = #{userRole.id}
+		</if>
+		<if test="userRole.userId != null and userRole.userId != '' ">
+				and userId = #{userRole.userId}
+		</if>
+		<if test="userRole.roleId != null and userRole.roleId != '' ">
+				and roleId = #{userRole.roleId}
+		</if>
+		<if test="userRole.createUser != null and userRole.createUser != '' ">
+				and createUser = #{userRole.createUser}
+		</if>
+		<if test="userRole.createDate != null and userRole.createDate != '' ">
+				and DATE_FORMAT(createDate,'%Y-%m-%d') = DATE_FORMAT(#{userRole.createDate},'%Y-%m-%d')
+		</if>
+		<if test="userRole.updateUser != null and userRole.updateUser != '' ">
+				and updateUser = #{userRole.updateUser}
+		</if>
+		<if test="userRole.updateDate != null and userRole.updateDate != '' ">
+				and DATE_FORMAT(updateDate,'%Y-%m-%d') = DATE_FORMAT(#{userRole.updateDate},'%Y-%m-%d')
+		</if>
+		<if test="userRole.active != null and userRole.active != '' ">
+				and active = #{userRole.active}
+		</if>
+	</select>
+	
+	
+	<!-- 根据id删除数据 -->
+	<update id="deleteUserRole">
+		delete from t_user_role
+		where id in 
+		<foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</update>
+	
+	
+	<!-- 动态添加数据 -->
+	<insert id="saveUserRole"
+		parameterType="com.han.lanshan.system.entry.UserRole">
+		insert into t_user_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				userId,
+			</if>
+			<if test="roleId != null">
+				roleId,
+			</if>
+			<if test="createUser != null">
+				createUser,
+			</if>
+			<if test="createDate != null">
+				createDate,
+			</if>
+			<if test="updateUser != null">
+				updateUser,
+			</if>
+			<if test="updateDate != null">
+				updateDate,
+			</if>
+			<if test="active != null">
+				active,
+			</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="userId != null">
+				#{userId},
+			</if>
+			<if test="roleId != null">
+				#{roleId},
+			</if>
+			<if test="createUser != null">
+				#{createUser},
+			</if>
+			<if test="createDate != null">
+				#{createDate},
+			</if>
+			<if test="updateUser != null">
+				#{updateUser},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate},
+			</if>
+			<if test="active != null">
+				#{active},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 动态修改数据 -->
+	<update id="updateActiveUserRole" parameterType="map">
+		update t_user_role
+		<set>
+			<if test="userId != null">
+				userId = #{userId},
+			</if>
+			<if test="roleId != null">
+				roleId = #{roleId},
+			</if>
+			<if test="createUser != null">
+				createUser = #{createUser},
+			</if>
+			<if test="createDate != null">
+				createDate = #{createDate},
+			</if>
+			<if test="updateUser != null">
+				updateUser = #{updateUser},
+			</if>
+			<if test="updateDate != null">
+				updateDate = #{updateDate},
+			</if>
+			<if test="active != null">
+				active = #{active},
+			</if>
+		</set>
+		WHERE
+		id=#{id,jdbcType=VARCHAR}
+		
+	</update>
+	
+	<!-- 修改数据 -->
+	<update id="updateUserRole" parameterType="map">
+		update t_user_role
+		set 
+			userId = #{userId},
+			roleId = #{roleId},
+			createUser = #{createUser},
+			createDate = #{createDate},
+			updateUser = #{updateUser},
+			updateDate = #{updateDate},
+			active = #{active}
+		WHERE
+		id=#{id}
+	</update>
+	
+	
+	<!-- 根据用户id获取用户的角色列表 -->
+	<select id="findUserRoleByUserId" resultType="Map">
+		SELECT
+			u.id,
+			u.name,
+			ur.roleId,
+			r.roleName
+		FROM
+			t_user u
+		LEFT JOIN t_user_role ur ON u.id = ur.userId
+		LEFT JOIN t_role r ON ur.roleId = r.id
+		WHERE
+			u.id = #{userId}
+		  AND r.active=1 AND ur.active=1
+		
+	</select>
+	
+</mapper>
